@@ -1,0 +1,256 @@
+.habitacion-section {
+    height: 100vh;
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-color: #111;
+    display: flex;
+    overflow: hidden;
+}
+
+.contenedor-habitaciones {
+    margin-bottom: 0;
+}
+
+.panel-info {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(15px);
+    width: 65%;
+    height: 90vh;
+    margin-right: 20px;
+    border-radius: 40px 0 0 40px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.fotos-habitacion {
+    height: 55%;
+    position: relative;
+    overflow: hidden;
+
+    .carousel,
+    .carousel-inner,
+    .carousel-item {
+        height: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+}
+
+.cuerpo-panel {
+    padding: 1.5rem 3rem;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+
+    .titulo-hab {
+        color: #1b4332;
+        font-weight: 800;
+        font-size: 2.4rem;
+        margin-bottom: 0.4rem;
+    }
+
+    .desc-hab {
+        color: #555;
+        font-size: 1.1rem;
+        line-height: 1.5;
+    }
+}
+
+.servicios {
+    margin: 1rem 0;
+    display: flex;
+    gap: 20px;
+    color: #2d6a4f;
+    font-weight: 600;
+}
+
+.footer-panel {
+    margin-top: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 1.5rem;
+    border-top: 1px solid #eee;
+
+    .num {
+        font-size: 2.5rem;
+        font-weight: 900;
+        color: #1b4332;
+    }
+}
+
+.btn-reserva-pro {
+    background: #1b4332;
+    color: white;
+    border: none;
+    padding: 1.2rem 3rem;
+    border-radius: 20px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    transition: all 0.3s;
+    &:hover {
+        background: #2d6a4f;
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+}
+
+@media (max-width: 992px) {
+    .panel-info {
+        width: 100%;
+        margin-right: 0;
+        border-radius: 0;
+        height: 100vh;
+    }
+}
+
+.btn-abrir-foto {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 10;
+    background: rgba(0, 0, 0, 0.5);
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    color: white;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s;
+    &:hover { background: rgba(0,0,0,0.8); }
+}
+
+.modal-foto {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.95);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-foto-inner {
+    position: relative;
+    width: 80vw;
+    height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.foto-modal-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 16px;
+}
+
+.btn-cerrar-modal {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: rgba(255,255,255,0.15);
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    &:hover { background: rgba(255,255,255,0.3); }
+}
+
+.modal-prev, .modal-next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255,255,255,0.15);
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    &:hover { background: rgba(255,255,255,0.3); }
+}
+
+.modal-prev { left: -70px; }
+.modal-next { right: -70px; }
+
+.modal-indicadores {
+    position: absolute;
+    bottom: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 8px;
+
+    span {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.4);
+        cursor: pointer;
+        transition: background 0.2s;
+        &.activo { background: white; }
+    }
+
+}
+.scroll-ubicacion {
+    background: #111;
+    text-align: center;
+    padding: 1.5rem;
+
+    button {
+        color: white !important;
+        text-decoration: none;
+        border: none;
+        background: none;
+        cursor: pointer;
+
+        &:hover { opacity: 0.7; }
+    }
+
+    .animate-bounce {
+        animation: bounce 1.5s infinite;
+        display: block;
+        color: white;
+        font-size: 2rem;
+    }
+
+    span {
+        color: white;
+        font-size: 0.85rem;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        font-weight: 700;
+    }
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(8px); }
+}

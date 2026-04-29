@@ -1,0 +1,150 @@
+/* BOTONES PRINCIPALES */
+.btn-reserva-pro {
+  background-color: #212529;
+  color: #ffffff;
+  border: 2px solid #212529;
+  padding: 10px 24px;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+
+  &:hover {
+    background-color: #000000;
+    border-color: #000000;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  }
+}
+
+.reservado-btn {
+  background-color: #198754 !important;
+  border-color: #198754 !important;
+  opacity: 0.9;
+  
+  &:hover {
+    transform: none;
+    box-shadow: none;
+    cursor: default;
+  }
+}
+
+.btn-icono {
+  width: 45px;
+  height: 45px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  border: 2px solid;
+  background: white;
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+}
+
+.btn-info-reserva {
+  border-color: #0dcaf0;
+  color: #0dcaf0;
+  &:hover { background: #0dcaf0; color: white; }
+}
+
+.btn-cancelar-reserva {
+  border-color: #dc3545;
+  color: #dc3545;
+  &:hover { background: #dc3545; color: white; }
+}
+
+/* FONDOS Y MODALES */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(5px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1050;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.modal-content {
+  background: #ffffff;
+  padding: 2.5rem;
+  padding-bottom: 3.5rem;
+  border-radius: 16px;
+  width: 90%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.25);
+  animation: slideUp 0.3s ease-out;
+}
+
+.btn-cerrar {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: #adb5bd;
+  cursor: pointer;
+  transition: 0.2s;
+  &:hover { color: #dc3545; transform: scale(1.1) rotate(90deg); }
+}
+
+/*   CALENDARIO */
+.custom-day {
+  text-align: center;
+  padding: 0.185rem 0.25rem;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  height: 2.2rem;
+  width: 2.2rem;
+  border-radius: 0.3rem;
+  cursor: pointer;
+  font-weight: 500;
+  transition: 0.2s;
+}
+
+.custom-day:hover, .custom-day.focused { 
+  background-color: #e9ecef; 
+}
+
+.custom-day.range, .custom-day:hover { 
+  background-color: #212529 !important; 
+  color: white !important; 
+  font-weight: bold; 
+}
+
+.custom-day.faded { 
+  background-color: rgba(33, 37, 41, 0.15) !important; 
+  color: #212529 !important; 
+}
+
+.custom-day.text-muted { 
+  opacity: 0.4; 
+  cursor: not-allowed; 
+}
+
+
+/* ANIMACIONES */
+   
+@keyframes fadeIn { 
+  from { opacity: 0; } 
+  to { opacity: 1; } 
+}
+
+@keyframes slideUp { 
+  from { opacity: 0; transform: translateY(20px); } 
+  to { opacity: 1; transform: translateY(0); } 
+}

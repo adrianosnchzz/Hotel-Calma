@@ -1,0 +1,25 @@
+<section class="ubicacion-section">
+
+  <div class="ubicacion-overlay">
+    <div class="ubicacion-info" data-aos="fade-right">
+      <span class="ubicacion-badge">Dónde estamos</span>
+      <h2>Zahara de la Sierra</h2>
+      <p>Cádiz, Andalucía · España</p>
+      <a href="https://maps.google.com/?q=Zahara+de+la+Sierra,+Cadiz"
+         target="_blank"
+         class="btn-como-llegar">
+        <i class="bi bi-map"></i> Cómo llegar
+      </a>
+    </div>
+  </div>
+
+  <google-map
+    [center]="center"
+    [zoom]="zoom"
+    [options]="mapOptions"
+    width="100%"
+    height="100%">
+    <map-marker [position]="center" [options]="markerOptions" />
+  </google-map>
+
+</section>

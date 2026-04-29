@@ -1,0 +1,65 @@
+<div class="d-flex align-items-center gap-2">
+
+  <div *ngIf="!usuarioLogueado" class="d-flex gap-2">
+    <button class="btn btn-outline-light border-0 fw-bold small"
+      (click)="esLogin = false; abrirModal()">
+      <i class="bi bi-person-plus"></i> Registrarse
+    </button>
+    <button class="btn btn-light px-4 shadow-sm fw-bold small text-dark"
+      (click)="esLogin = true; abrirModal()">
+      <i class="bi bi-box-arrow-in-right"></i> Entrar
+    </button>
+  </div>
+
+  <div *ngIf="usuarioLogueado" class="d-flex align-items-center gap-2">
+    <span class="text-white fw-bold">
+      Hola, {{ usuarioLogueado.nombre }}
+    </span>
+    <div class="vr bg-secondary"></div>
+    <button class="btn btn-outline-danger btn-sm fw-bold" (click)="logout()">
+      <i class="bi bi-box-arrow-right"></i> Salir
+    </button>
+  </div>
+
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" *ngIf="modalAbierto" (click)="cerrarModal()">
+  <div class="modal-content text-start" (click)="$event.stopPropagation()">
+
+    <button class="btn-cerrar" (click)="cerrarModal()">✕</button>
+
+    <div class="tabs">
+      <button [class.activo]="esLogin" (click)="esLogin = true">Iniciar Sesión</button>
+      <button [class.activo]="!esLogin" (click)="esLogin = false">Registrarse</button>
+    </div>
+
+    <form (ngSubmit)="confirmar()" #authForm="ngForm">
+
+      <div *ngIf="!esLogin">
+        <div class="grupo-input">
+          <label>Nombre completo</label>
+          <input type="text" name="nombre" [(ngModel)]="usuario.nombre" required>
+        </div>
+        <div class="grupo-input">
+          <label>DNI / Pasaporte</label>
+          <input type="text" name="dni" [(ngModel)]="usuario.dni" required>
+        </div>
+      </div>
+
+      <div class="grupo-input">
+        <label>Email</label>
+        <input type="email" name="email" [(ngModel)]="usuario.email" required email>
+      </div>
+      <div class="grupo-input">
+        <label>Contraseña</label>
+        <input type="password" name="password" [(ngModel)]="usuario.password" required minlength="6">
+      </div>
+
+      <button type="submit" class="btn-confirmar" [disabled]="authForm.invalid">
+        {{ esLogin ? 'Iniciar Sesión' : 'Crear Cuenta' }}
+      </button>
+
+    </form>
+  </div>
+</div>
