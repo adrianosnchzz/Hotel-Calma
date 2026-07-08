@@ -1,0 +1,231 @@
+<div class="mc-page" *ngIf="!cargando">
+
+  <!-- HERO HEADER -->
+  <div class="mc-hero">
+    <div class="mc-hero-bg"></div>
+    <div class="mc-hero-content">
+      <div class="mc-avatar">{{ inicial() }}</div>
+      <div class="mc-hero-info">
+        <h1>{{ usuario?.nombre }}</h1>
+        <p>{{ usuario?.email }}</p>
+        <span class="mc-rol">{{ usuario?.rol || 'Cliente' }}</span>
+      </div>
+      <a routerLink="/" class="btn-inicio">
+        <i class="bi bi-house-fill"></i> Inicio
+      </a>
+    </div>
+  </div>
+
+  <!-- TABS -->
+  <div class="mc-tabs-wrapper">
+    <div class="mc-tabs">
+      <button class="mc-tab" [class.activo]="pestana === 'info'" (click)="setPestana('info')">
+        <i class="bi bi-person-lines-fill"></i>
+        <span>Mis datos</span>
+      </button>
+      <button class="mc-tab" [class.activo]="pestana === 'reservas'" (click)="setPestana('reservas')">
+        <i class="bi bi-calendar2-check"></i>
+        <span>Mis reservas</span>
+        <span class="mc-badge" *ngIf="reservasActivas.length > 0">{{ reservasActivas.length }}</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- CONTENIDO -->
+  <div class="mc-body">
+
+    <!-- ── PANEL INFO ── -->
+    <div class="mc-panel" *ngIf="pestana === 'info'">
+      <div class="info-grid">
+        <div class="info-item">
+          <div class="info-item-icon"><i class="bi bi-person"></i></div>
+          <div class="info-item-body">
+            <label>Nombre completo</label>
+            <strong>{{ usuario?.nombre || '—' }}</strong>
+          </div>
+        </div>
+        <div class="info-item">
+          <div class="info-item-icon"><i class="bi bi-envelope"></i></div>
+          <div class="info-item-body">
+            <label>Correo electrónico</label>
+            <strong>{{ usuario?.email || '—' }}</strong>
+          </div>
+        </div>
+        <div class="info-item">
+          <div class="info-item-icon"><i class="bi bi-card-text"></i></div>
+          <div class="info-item-body">
+            <label>DNI / Pasaporte</label>
+            <strong>{{ usuario?.dni || '—' }}</strong>
+          </div>
+        </div>
+        <div class="info-item">
+          <div class="info-item-icon"><i class="bi bi-shield-check"></i></div>
+          <div class="info-item-body">
+            <label>Tipo de cuenta</label>
+            <strong class="text-capitalize">{{ usuario?.rol || 'cliente' }}</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── PANEL RESERVAS ── -->
+    <div class="mc-panel" *ngIf="pestana === 'reservas'">
+
+      <!-- Sin ninguna reserva -->
+      <div class="sin-reservas" *ngIf="reservas.length === 0">
+        <div class="sr-icon"><i class="bi bi-calendar-x"></i></div>
+        <h3>Sin reservas todavía</h3>
+        <p>Cuando realices una reserva aparecerá aquí.</p>
+        <a routerLink="/habitaciones" class="btn-ver-suites">
+          <i class="bi bi-door-open"></i> Explorar suites
+        </a>
+      </div>
+
+      <!-- ── RESERVAS ACTIVAS (sin título encima) ── -->
+      <div class="reservas-grid" *ngIf="reservasActivas.length > 0">
+        <div class="reserva-card" *ngFor="let r of reservasActivas">
+
+          <div class="rc-header">
+            <div class="rc-suite">
+              <i class="bi bi-building"></i>{{ r.habitacionNombre }}
+            </div>
+            <span class="rc-estado"
+              [class.confirmada]="r.estado === 'confirmada'"
+              [class.pendiente]="r.estado === 'pendiente'"
+              [class.cancelada]="r.estado === 'cancelada'">
+              <i class="bi"
+                [class.bi-check-circle-fill]="r.estado === 'confirmada'"
+                [class.bi-clock-fill]="r.estado === 'pendiente'"
+                [class.bi-x-circle-fill]="r.estado === 'cancelada'">
+              </i>
+              {{ r.estado }}
+            </span>
+          </div>
+
+          <div class="rc-fechas">
+            <div class="rc-fecha-item">
+              <span class="rf-label">Entrada</span>
+              <span class="rf-val">{{ formatFecha(r.fechaEntrada) }}</span>
+            </div>
+            <div class="rc-fecha-sep">
+              <span class="rf-noches">{{ r.diasTotales }} noches</span>
+              <div class="rf-linea"></div>
+            </div>
+            <div class="rc-fecha-item end">
+              <span class="rf-label">Salida</span>
+              <span class="rf-val">{{ formatFecha(r.fechaSalida) }}</span>
+            </div>
+          </div>
+
+          <div class="rc-extras" *ngIf="r.extras?.desayuno || r.extras?.limpieza">
+            <span class="rc-extra" *ngIf="r.extras?.desayuno">
+              <i class="bi bi-cup-hot-fill"></i> Desayuno incluido
+            </span>
+            <span class="rc-extra" *ngIf="r.extras?.limpieza">
+              <i class="bi bi-stars"></i> Servicio de limpieza
+            </span>
+          </div>
+
+          <div class="rc-resena-bloque" *ngIf="resenaDeHabitacion(r.habitacionNombre) as resena">
+            <div class="rc-resena-header">
+              <i class="bi bi-star-fill"></i> Tu reseña
+            </div>
+            <div class="rc-resena-body">
+              <div class="rc-resena-estrellas">
+                <span *ngFor="let s of [1,2,3,4,5]" class="rc-estrella" [class.llena]="s <= resena.valoracion">★</span>
+              </div>
+              <p class="rc-resena-comentario">{{ resena.comentario }}</p>
+            </div>
+          </div>
+
+          <div class="rc-footer">
+            <span class="rc-creacion">
+              <i class="bi bi-clock-history"></i>
+              Reservado el {{ formatFecha(r.fechaCreacion) }}
+            </span>
+            <div class="rc-footer-right">
+              <span class="rc-precio">{{ r.totalPagado }} €</span>
+              <button class="btn-cancelar" *ngIf="r.estado !== 'cancelada'" (click)="cancelarReserva(r)">
+                <i class="bi bi-x-circle"></i> Cancelar
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ── ESTANCIAS ANTERIORES: título SOLO si hay pasadas ── -->
+      <div *ngIf="reservasPasadas.length > 0">
+        <h4 class="seccion-pasadas">
+          <i class="bi bi-clock-history"></i> Estancias anteriores
+        </h4>
+        <div class="reservas-grid">
+          <div class="reserva-card pasada" *ngFor="let r of reservasPasadas">
+
+            <div class="rc-header">
+              <div class="rc-suite">
+                <i class="bi bi-building"></i>{{ r.habitacionNombre }}
+              </div>
+              <span class="rc-estado finalizada">
+                <i class="bi bi-check2-all"></i> Estancia finalizada
+              </span>
+            </div>
+
+            <div class="rc-fechas">
+              <div class="rc-fecha-item">
+                <span class="rf-label">Entrada</span>
+                <span class="rf-val">{{ formatFecha(r.fechaEntrada) }}</span>
+              </div>
+              <div class="rc-fecha-sep">
+                <span class="rf-noches">{{ r.diasTotales }} noches</span>
+                <div class="rf-linea"></div>
+              </div>
+              <div class="rc-fecha-item end">
+                <span class="rf-label">Salida</span>
+                <span class="rf-val">{{ formatFecha(r.fechaSalida) }}</span>
+              </div>
+            </div>
+
+            <div class="rc-extras" *ngIf="r.extras?.desayuno || r.extras?.limpieza">
+              <span class="rc-extra" *ngIf="r.extras?.desayuno">
+                <i class="bi bi-cup-hot-fill"></i> Desayuno incluido
+              </span>
+              <span class="rc-extra" *ngIf="r.extras?.limpieza">
+                <i class="bi bi-stars"></i> Servicio de limpieza
+              </span>
+            </div>
+
+            <div class="rc-resena-bloque" *ngIf="resenaDeHabitacion(r.habitacionNombre) as resena">
+              <div class="rc-resena-header">
+                <i class="bi bi-star-fill"></i> Tu reseña
+              </div>
+              <div class="rc-resena-body">
+                <div class="rc-resena-estrellas">
+                  <span *ngFor="let s of [1,2,3,4,5]" class="rc-estrella" [class.llena]="s <= resena.valoracion">★</span>
+                </div>
+                <p class="rc-resena-comentario">{{ resena.comentario }}</p>
+              </div>
+            </div>
+
+            <div class="rc-footer">
+              <span class="rc-creacion">
+                <i class="bi bi-clock-history"></i>
+                Reservado el {{ formatFecha(r.fechaCreacion) }}
+              </span>
+              <div class="rc-footer-right">
+                <span class="rc-precio">{{ r.totalPagado }} €</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<div class="mc-loading" *ngIf="cargando">
+  <div class="spinner-border text-success" role="status"></div>
+</div>

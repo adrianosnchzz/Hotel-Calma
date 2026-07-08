@@ -5,11 +5,13 @@ import * as AOS from 'aos';
 import { Firestore, collection, getDocs, addDoc, Timestamp } from '@angular/fire/firestore';
 
 import { Reserva } from '../../reserva/reserva'; 
+import { Resenas } from '../resenas/resenas';
+
 
 @Component({
   selector: 'app-catalogo',
   standalone: true,
-  imports: [CommonModule, Reserva], 
+  imports: [CommonModule, Reserva, Resenas], 
   templateUrl: './catalogo.html',
   styleUrls: ['./catalogo.scss']
 })
@@ -18,7 +20,7 @@ export class Catalogo implements OnInit {
   
   private firestore = inject(Firestore);
   private platformId = inject(PLATFORM_ID);
-  private cdr = inject(ChangeDetectorRef); // 1. Herramienta para actualizar la pantalla
+  private cdr = inject(ChangeDetectorRef);
 
   modalAbierto = false;
   fotoModal = '';
@@ -47,7 +49,7 @@ export class Catalogo implements OnInit {
         this.habitaciones = tempHabitaciones;
         console.log('¡Exito! Habitaciones cargadas:', this.habitaciones);
 
-        // 2. ¡DESPERTAMOS A ANGULAR PARA QUE PINTE EL HTML!
+        
         this.cdr.detectChanges();
 
         if (typeof window !== 'undefined') {

@@ -1,0 +1,128 @@
+<div class="resenas-wrap">
+
+  <!-- CABECERA: media + botones -->
+  <div class="resenas-header">
+    <div class="resenas-media-bloque">
+      <div class="resenas-media" *ngIf="resenas.length > 0">
+        <span class="estrella-media">★</span>
+        <span class="media-num">{{ mediaValoracion | number:'1.1-1' }}</span>
+        <span class="media-total">({{ resenas.length }} {{ resenas.length === 1 ? 'reseña' : 'reseñas' }})</span>
+        <!-- Botón ampliar -->
+        <button class="btn-ampliar" (click)="abrirPopupResenas()">
+          <i class="bi bi-arrows-fullscreen"></i> Ver todas
+        </button>
+      </div>
+      <div class="resenas-media" *ngIf="resenas.length === 0">
+        <span class="sin-txt">Sin reseñas aun</span>
+      </div>
+    </div>
+
+    <button class="btn-valorar" *ngIf="puedeResenar" (click)="abrirModal()">
+      <i class="bi" [class.bi-star-fill]="miResena" [class.bi-star]="!miResena"></i>
+      {{ miResena ? 'Tu reseña' : 'Valorar' }}
+    </button>
+  </div>
+
+  <!-- PREVIEW (solo 1 reseña) -->
+  <div class="resenas-preview" *ngIf="resenas.length > 0">
+    <div class="resena-item">
+      <div class="resena-top">
+        <div class="resena-avatar">{{ resenas[0].nombreUsuario.charAt(0).toUpperCase() }}</div>
+        <div class="resena-meta">
+          <span class="resena-nombre">
+            {{ resenas[0].nombreUsuario }}
+            <span class="tu-badge" *ngIf="usuarioActual && resenas[0].idUsuario === usuarioActual.uid">Tu</span>
+          </span>
+          <div class="resena-estrellas">
+            <span *ngFor="let s of [1,2,3,4,5]" class="estrella-item" [class.llena]="s <= resenas[0].valoracion">★</span>
+          </div>
+        </div>
+      </div>
+      <p class="resena-comentario">{{ resenas[0].comentario }}</p>
+    </div>
+    <p class="ver-mas-hint" *ngIf="resenas.length > 1" (click)="abrirPopupResenas()">
+      + {{ resenas.length - 1 }} reseña{{ resenas.length - 1 > 1 ? 's' : '' }} mas
+    </p>
+  </div>
+
+</div>
+
+<!-- POPUP TODAS LAS RESEÑAS -->
+<div class="popup-overlay" *ngIf="popupAbierto" (click)="cerrarPopupResenas()">
+  <div class="popup-resenas" (click)="$event.stopPropagation()">
+
+    <div class="popup-header">
+      <div class="popup-header-left">
+        <span class="popup-estrella">★</span>
+        <span class="popup-media">{{ mediaValoracion | number:'1.1-1' }}</span>
+        <span class="popup-total">· {{ resenas.length }} {{ resenas.length === 1 ? 'reseña' : 'reseñas' }}</span>
+      </div>
+      <button class="btn-cerrar-popup" (click)="cerrarPopupResenas()">
+        <i class="bi bi-x-lg"></i>
+      </button>
+    </div>
+
+    <div class="popup-lista">
+      <div class="popup-resena-item" *ngFor="let r of resenas; trackBy: trackById">
+        <div class="resena-top">
+          <div class="resena-avatar grande">{{ r.nombreUsuario.charAt(0).toUpperCase() }}</div>
+          <div class="resena-meta">
+            <span class="resena-nombre dark">
+              {{ r.nombreUsuario }}
+              <span class="tu-badge" *ngIf="usuarioActual && r.idUsuario === usuarioActual.uid">Tu</span>
+            </span>
+            <div class="resena-estrellas">
+              <span *ngFor="let s of [1,2,3,4,5]" class="estrella-item dark" [class.llena]="s <= r.valoracion">★</span>
+            </div>
+          </div>
+        </div>
+        <p class="popup-comentario">{{ r.comentario }}</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- MODAL VALORAR -->
+<div class="modal-overlay-r" *ngIf="modalAbierto" (click)="cerrarModal()">
+  <div class="modal-resena" (click)="$event.stopPropagation()">
+
+    <button class="btn-cerrar-r" (click)="cerrarModal()">✕</button>
+    <h3 class="modal-titulo">{{ miResena ? 'Editar tu reseña' : 'Valorar suite' }}</h3>
+    <p class="modal-subtitulo">{{ nombreHab }}</p>
+
+    <div class="estrellas-picker">
+      <span *ngFor="let s of [1,2,3,4,5]"
+            class="estrella-pick"
+            [class.activa]="estrellaActiva(s)"
+            (mouseenter)="hoverEstrella(s)"
+            (mouseleave)="salirEstrella()"
+            (click)="setEstrella(s)">★</span>
+    </div>
+
+    <p class="pick-label" *ngIf="form.valoracion === 0">Selecciona una puntuacion</p>
+    <p class="pick-label" *ngIf="form.valoracion === 1"> Deficiente</p>
+    <p class="pick-label" *ngIf="form.valoracion === 2"> Regular</p>
+    <p class="pick-label" *ngIf="form.valoracion === 3"> Bueno</p>
+    <p class="pick-label" *ngIf="form.valoracion === 4"> Muy bueno</p>
+    <p class="pick-label" *ngIf="form.valoracion === 5"> Excelente</p>
+
+    <textarea
+      class="resena-textarea"
+      placeholder="Cuentanos tu experiencia..."
+      [(ngModel)]="form.comentario"
+      rows="4"
+      maxlength="400">
+    </textarea>
+    <span class="char-count">{{ form.comentario.length }}/400</span>
+
+    <button
+      class="btn-enviar-resena"
+      [disabled]="!form.valoracion || !form.comentario.trim() || enviando"
+      (click)="enviarResena()">
+      <span *ngIf="!enviando">{{ miResena ? 'Guardar cambios' : 'Publicar reseña' }}</span>
+      <span *ngIf="enviando">Guardando...</span>
+    </button>
+
+  </div>
+</div>

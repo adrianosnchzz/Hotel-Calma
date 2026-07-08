@@ -1,5 +1,6 @@
 <div class="d-flex align-items-center gap-2">
 
+  <!-- SIN SESIÓN -->
   <div *ngIf="!usuarioLogueado" class="d-flex gap-2">
     <button class="btn btn-outline-light border-0 fw-bold small"
       (click)="esLogin = false; abrirModal()">
@@ -11,19 +12,57 @@
     </button>
   </div>
 
-  <div *ngIf="usuarioLogueado" class="d-flex align-items-center gap-2">
-    <span class="text-white fw-bold">
-      Hola, {{ usuarioLogueado.nombre }}
-    </span>
-    <div class="vr bg-secondary"></div>
-    <button class="btn btn-outline-danger btn-sm fw-bold" (click)="logout()">
-      <i class="bi bi-box-arrow-right"></i> Salir
-    </button>
+  <!-- CON SESIÓN -->
+  <div *ngIf="usuarioLogueado"
+       class="cuenta-trigger"
+       [class.abierto]="dropdownAbierto"
+       (click)="$event.stopPropagation(); toggleDropdown()">
+
+    <div class="cuenta-avatar-sm">
+      {{ (usuarioLogueado.nombre || 'U').charAt(0).toUpperCase() }}
+    </div>
+    <span class="cuenta-nombre-nav">{{ usuarioLogueado.nombre }}</span>
+    <i class="bi bi-chevron-down cuenta-chevron"></i>
+
+    <!-- DROPDOWN -->
+    <div class="cuenta-dropdown" (click)="$event.stopPropagation()">
+
+      <div class="dropdown-perfil">
+        <div class="dropdown-avatar-grande">
+          {{ (usuarioLogueado.nombre || 'U').charAt(0).toUpperCase() }}
+        </div>
+        <div class="dropdown-perfil-info">
+          <span class="dp-nombre">{{ usuarioLogueado.nombre }}</span>
+          <span class="dp-email">{{ usuarioLogueado.email }}</span>
+        </div>
+      </div>
+
+      <div class="dropdown-sep"></div>
+
+      <a class="dropdown-opcion" routerLink="/mi-cuenta" (click)="cerrarDropdown()">
+        <span class="opcion-icono"><i class="bi bi-person-lines-fill"></i></span>
+        <span class="opcion-texto">
+          <strong>Mi cuenta</strong>
+          <small>Datos personales y reservas</small>
+        </span>
+        <i class="bi bi-chevron-right opcion-arrow"></i>
+      </a>
+
+      <div class="dropdown-sep"></div>
+
+      <button class="dropdown-opcion logout" (click)="logout(); cerrarDropdown()">
+        <span class="opcion-icono"><i class="bi bi-box-arrow-right"></i></span>
+        <span class="opcion-texto">
+          <strong>Cerrar sesión</strong>
+        </span>
+      </button>
+
+    </div>
   </div>
 
 </div>
 
-<!-- MODAL -->
+<!-- MODAL LOGIN / REGISTRO -->
 <div class="modal-overlay" *ngIf="modalAbierto" (click)="cerrarModal()">
   <div class="modal-content text-start" (click)="$event.stopPropagation()">
 
@@ -35,7 +74,6 @@
     </div>
 
     <form (ngSubmit)="confirmar()" #authForm="ngForm">
-
       <div *ngIf="!esLogin">
         <div class="grupo-input">
           <label>Nombre completo</label>
@@ -46,7 +84,6 @@
           <input type="text" name="dni" [(ngModel)]="usuario.dni" required>
         </div>
       </div>
-
       <div class="grupo-input">
         <label>Email</label>
         <input type="email" name="email" [(ngModel)]="usuario.email" required email>
@@ -55,11 +92,10 @@
         <label>Contraseña</label>
         <input type="password" name="password" [(ngModel)]="usuario.password" required minlength="6">
       </div>
-
-      <button type="submit" class="btn-confirmar" [disabled]="authForm.invalid">
-        {{ esLogin ? 'Iniciar Sesión' : 'Crear Cuenta' }}
+      <button type="submit" class="btn-confirmar" [disabled]="authForm.invalid || procesando">
+        <span *ngIf="!procesando">{{ esLogin ? 'Iniciar Sesión' : 'Crear Cuenta' }}</span>
+        <span *ngIf="procesando">{{ esLogin ? 'Entrando...' : 'Creando cuenta...' }}</span>
       </button>
-
     </form>
   </div>
 </div>

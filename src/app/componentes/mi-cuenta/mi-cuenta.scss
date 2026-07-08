@@ -1,0 +1,216 @@
+$verde:       #1b4332;
+$verde-med:   #2d6a4f;
+$verde-claro: #d8f3dc;
+$crema:       #f7f3ee;
+$borde:       #e9e4dc;
+$gris:        #6c757d;
+$blanco:      #ffffff;
+$oro:         #f5a623;
+
+.mc-loading {
+  display: flex; justify-content: center; align-items: center; min-height: 50vh;
+}
+
+.mc-page { min-height: 80vh; background: $crema; }
+
+/* ── HERO ── */
+.mc-hero {
+  position: relative; overflow: hidden; padding: 3rem 2rem 2.5rem;
+}
+.mc-hero-bg {
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, $verde 0%, $verde-med 60%, #52b788 100%);
+  z-index: 0;
+  &::after {
+    content: ''; position: absolute; bottom: -1px; left: 0; right: 0;
+    height: 40px; background: $crema;
+    clip-path: ellipse(55% 100% at 50% 100%);
+  }
+}
+.mc-hero-content {
+  position: relative; z-index: 1; max-width: 860px; margin: 0 auto;
+  display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap;
+}
+.mc-avatar {
+  width: 80px; height: 80px; border-radius: 50%;
+  background: rgba(255,255,255,0.2); border: 3px solid rgba(255,255,255,0.5);
+  color: #fff; font-size: 2rem; font-weight: 800;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; backdrop-filter: blur(4px);
+}
+.mc-hero-info {
+  flex: 1;
+  h1 { margin: 0 0 0.25rem; font-size: 1.8rem; font-weight: 800; color: #fff; letter-spacing: -0.5px; }
+  p  { margin: 0 0 0.6rem; color: rgba(255,255,255,0.75); font-size: 0.9rem; }
+}
+.mc-rol {
+  display: inline-block; background: rgba(255,255,255,0.2); color: #fff;
+  font-size: 0.75rem; font-weight: 700; padding: 3px 12px; border-radius: 999px;
+  text-transform: capitalize; letter-spacing: 0.4px; border: 1px solid rgba(255,255,255,0.3);
+}
+.btn-inicio {
+  display: inline-flex; align-items: center; gap: 0.45rem;
+  padding: 0.55rem 1.2rem; background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.35); border-radius: 999px;
+  color: #fff; font-weight: 600; font-size: 0.88rem; text-decoration: none;
+  transition: background 0.2s; backdrop-filter: blur(4px); margin-left: auto;
+  &:hover { background: rgba(255,255,255,0.28); color: #fff; text-decoration: none; }
+}
+
+/* ── TABS ── */
+.mc-tabs-wrapper { background: $crema; padding: 0 2rem; max-width: 860px; margin: 0 auto; }
+.mc-tabs { display: flex; border-bottom: 2px solid $borde; }
+.mc-tab {
+  display: flex; align-items: center; gap: 0.5rem;
+  padding: 1rem 1.5rem; background: none; border: none;
+  border-bottom: 3px solid transparent; margin-bottom: -2px;
+  font-weight: 600; font-size: 0.92rem; color: $gris; cursor: pointer; transition: all 0.2s;
+  &:hover:not(.activo) { color: $verde-med; }
+  &.activo { color: $verde; border-bottom-color: $verde; }
+}
+.mc-badge {
+  background: $verde; color: #fff; border-radius: 999px;
+  font-size: 0.72rem; font-weight: 700; padding: 1px 8px; margin-left: 2px;
+}
+
+/* ── BODY ── */
+.mc-body { max-width: 860px; margin: 0 auto; padding: 2rem; }
+.mc-panel { animation: panelIn 0.22s ease; }
+@keyframes panelIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── INFO ── */
+.info-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;
+  @media (max-width: 600px) { grid-template-columns: 1fr; }
+}
+.info-item {
+  display: flex; align-items: center; gap: 1rem;
+  background: $blanco; border: 1px solid $borde; border-radius: 14px;
+  padding: 1.2rem 1.4rem; transition: box-shadow 0.2s;
+  &:hover { box-shadow: 0 4px 18px rgba(27,67,50,.08); }
+}
+.info-item-icon {
+  width: 42px; height: 42px; border-radius: 10px;
+  background: $verde-claro; color: $verde;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem; flex-shrink: 0;
+}
+.info-item-body {
+  display: flex; flex-direction: column; gap: 0.2rem; overflow: hidden;
+  label { font-size: 0.72rem; font-weight: 600; color: $gris; text-transform: uppercase; letter-spacing: 0.5px; margin: 0; }
+  strong { font-size: 0.97rem; color: #1a1a1a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+}
+
+/* ── SIN RESERVAS ── */
+.sin-reservas {
+  display: flex; flex-direction: column; align-items: center;
+  gap: 0.75rem; padding: 5rem 1rem; text-align: center;
+  h3 { font-size: 1.2rem; font-weight: 700; color: #333; margin: 0; }
+  p  { color: $gris; margin: 0; font-size: 0.95rem; }
+}
+.sr-icon {
+  width: 72px; height: 72px; border-radius: 50%;
+  background: $verde-claro; color: $verde; font-size: 1.8rem;
+  display: flex; align-items: center; justify-content: center; margin-bottom: 0.5rem;
+}
+.btn-ver-suites {
+  margin-top: 0.5rem; display: inline-flex; align-items: center; gap: 0.5rem;
+  padding: 0.75rem 2rem; background: $verde; color: #fff;
+  border-radius: 10px; font-weight: 700; text-decoration: none; font-size: 0.9rem;
+  transition: background 0.2s;
+  &:hover { background: $verde-med; color: #fff; }
+}
+
+/* ── RESERVAS ── */
+.reservas-grid { display: flex; flex-direction: column; gap: 1.2rem; }
+.reserva-card {
+  background: $blanco; border: 1px solid $borde; border-radius: 18px; overflow: hidden;
+  transition: box-shadow 0.2s, transform 0.2s;
+  &:hover { box-shadow: 0 8px 28px rgba(27,67,50,.12); transform: translateY(-2px); }
+}
+.rc-header {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 1.2rem 1.4rem 0;
+}
+.rc-suite {
+  font-size: 1.05rem; font-weight: 800; color: $verde;
+  display: flex; align-items: center; gap: 0.5rem;
+}
+.rc-estado {
+  display: flex; align-items: center; gap: 0.35rem;
+  font-size: 0.78rem; font-weight: 700;
+  padding: 4px 12px; border-radius: 999px; text-transform: capitalize;
+  &.confirmada { background: #d1fae5; color: #065f46; }
+  &.pendiente  { background: #fef3c7; color: #92400e; }
+  &.cancelada  { background: #fee2e2; color: #991b1b; }
+  &.finalizada { background: #e9ecef; color: #6c757d; border: 1px solid #ced4da; }
+}
+.rc-fechas {
+  display: flex; align-items: center; padding: 1rem 1.4rem;
+  background: $crema; margin: 1rem 1.4rem; border-radius: 12px;
+  @media (max-width: 480px) { flex-wrap: wrap; gap: 0.75rem; }
+}
+.rc-fecha-item { display: flex; flex-direction: column; gap: 0.2rem; flex: 1; &.end { text-align: right; } }
+.rf-label { font-size: 0.7rem; font-weight: 600; color: $gris; text-transform: uppercase; letter-spacing: 0.4px; }
+.rf-val   { font-size: 0.95rem; font-weight: 700; color: #1a1a1a; }
+.rc-fecha-sep { display: flex; flex-direction: column; align-items: center; gap: 0.3rem; padding: 0 1rem; flex-shrink: 0; }
+.rf-noches { font-size: 0.72rem; font-weight: 700; color: $verde; white-space: nowrap; background: $verde-claro; padding: 2px 10px; border-radius: 999px; }
+.rf-linea  { width: 40px; height: 2px; background: linear-gradient(90deg, $verde-claro, $verde-med, $verde-claro); border-radius: 999px; }
+.rc-extras { display: flex; gap: 0.5rem; flex-wrap: wrap; padding: 0 1.4rem 1rem; }
+.rc-extra  { display: flex; align-items: center; gap: 0.35rem; font-size: 0.8rem; font-weight: 600; background: $verde-claro; color: $verde-med; padding: 4px 12px; border-radius: 999px; }
+
+/* ── BLOQUE RESEÑA ── */
+.rc-resena-bloque {
+  margin: 0 1.4rem 1rem;
+  background: #fffbf2;
+  border: 1px solid rgba(245,166,35,0.25);
+  border-radius: 12px;
+  overflow: hidden;
+}
+.rc-resena-header {
+  display: flex; align-items: center; gap: 0.4rem;
+  padding: 0.5rem 1rem;
+  background: rgba(245,166,35,0.1);
+  font-size: 0.78rem; font-weight: 700;
+  color: darken($oro, 15%);
+  border-bottom: 1px solid rgba(245,166,35,0.2);
+  i { color: $oro; }
+}
+.rc-resena-body { padding: 0.65rem 1rem; }
+.rc-resena-estrellas { display: flex; gap: 2px; margin-bottom: 0.3rem; }
+.rc-estrella { font-size: 0.9rem; color: #ddd; &.llena { color: $oro; } }
+.rc-resena-comentario { font-size: 0.84rem; color: #555; margin: 0; line-height: 1.4; font-style: italic; }
+
+/* ── FOOTER TARJETA ── */
+.rc-footer {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 0.9rem 1.4rem; border-top: 1px solid $borde; gap: 1rem; flex-wrap: wrap;
+}
+.rc-creacion { font-size: 0.78rem; color: $gris; display: flex; align-items: center; gap: 0.35rem; }
+.rc-footer-right { display: flex; align-items: center; gap: 0.85rem; }
+.rc-precio { font-size: 1.4rem; font-weight: 900; color: $verde; letter-spacing: -0.5px; }
+.btn-cancelar {
+  display: inline-flex; align-items: center; gap: 0.35rem;
+  padding: 0.45rem 1rem; background: #fff0f0; color: #c0392b;
+  border: 1px solid #f5c6cb; border-radius: 8px;
+  font-size: 0.82rem; font-weight: 700; cursor: pointer;
+  transition: background 0.2s, border-color 0.2s, transform 0.15s;
+  &:hover { background: #ffe0e0; border-color: #e74c3c; transform: scale(1.03); }
+  &:active { transform: scale(0.97); }
+}
+
+/* ── ESTANCIAS ANTERIORES ── */
+.seccion-pasadas {
+  display: flex; align-items: center; gap: 0.5rem;
+  font-size: 0.9rem; font-weight: 700; color: $gris;
+  margin: 2rem 0 1rem;
+  i { font-size: 1rem; }
+}
+
+.reserva-card.pasada {
+  opacity: 0.8;
+  border-left: 3px solid #ced4da;
+}

@@ -49,6 +49,16 @@ export class Reserva implements OnInit {
   fromDate: NgbDate | null = this.calendar.getToday();
   toDate: NgbDate | null = this.calendar.getNext(this.calendar.getToday(), 'd', 1);
 
+  //  comprueba si una reserva de Firestore ya ha caducado ──────────
+  private reservaHaCaducado(data: any): boolean {
+    if (!data['fechaSalida']) return false;
+    const hoy = new Date();
+    hoy.setHours(0, 0, 0, 0);
+    const salida = new Date(data['fechaSalida']);
+    salida.setHours(0, 0, 0, 0);
+    return salida < hoy;
+  }
+
   ngOnInit() {
     this.cargarFechasOcupadas();
 
@@ -78,8 +88,12 @@ export class Reserva implements OnInit {
 
       querySnapshot.forEach(doc => {
         const data = doc.data();
+
+        // ─  ignorar reservas cuya fecha de salida ya pasó ─
+        if (this.reservaHaCaducado(data)) return;
+
         const entrada = new Date(data['fechaEntrada']);
-        const salida = new Date(data['fechaSalida']);
+        const salida  = new Date(data['fechaSalida']);
 
         let actual = new Date(entrada);
         while (actual <= salida) {
@@ -127,16 +141,29 @@ export class Reserva implements OnInit {
 
   deshabilitarDias = (date: NgbDateStruct) => {
     const hoy = this.calendar.getToday();
-    const esPasado = (date.year < hoy.year || (date.year === hoy.year && date.month < hoy.month) || (date.year === hoy.year && date.month === hoy.month && date.day < hoy.day));
+    const esPasado = (
+      date.year < hoy.year ||
+      (date.year === hoy.year && date.month < hoy.month) ||
+      (date.year === hoy.year && date.month === hoy.month && date.day < hoy.day)
+    );
     if (esPasado) return true;
 
     const dateStr = `${date.year}-${date.month}-${date.day}`;
     return this.fechasOcupadasStr.includes(dateStr);
   };
 
-  isHovered(date: NgbDate) { return this.fromDate && !this.toDate && this.hoveredDate && date.after(this.fromDate) && date.before(this.hoveredDate); }
-  isInside(date: NgbDate) { return this.toDate && date.after(this.fromDate) && date.before(this.toDate); }
-  isRange(date: NgbDate) { return date.equals(this.fromDate) || (this.toDate && date.equals(this.toDate)) || this.isInside(date) || this.isHovered(date); }
+  isHovered(date: NgbDate) {
+    return this.fromDate && !this.toDate && this.hoveredDate &&
+      date.after(this.fromDate) && date.before(this.hoveredDate);
+  }
+  isInside(date: NgbDate) {
+    return this.toDate && date.after(this.fromDate) && date.before(this.toDate);
+  }
+  isRange(date: NgbDate) {
+    return date.equals(this.fromDate) ||
+      (this.toDate && date.equals(this.toDate)) ||
+      this.isInside(date) || this.isHovered(date);
+  }
 
   async verificarReservaExistente() {
     if (!this.usuarioActual || !this.habitacion) return;
@@ -144,12 +171,17 @@ export class Reserva implements OnInit {
     const nombreHab = this.habitacion.nombre || this.habitacion.Nombre || 'Desconocida';
 
     try {
-      const q = query(collection(this.firestore, 'reservas'), where('idUsuario', '==', this.usuarioActual.uid));
+      const q = query(
+        collection(this.firestore, 'reservas'),
+        where('idUsuario', '==', this.usuarioActual.uid)
+      );
       const querySnapshot = await getDocs(q);
 
       const docReserva = querySnapshot.docs.find(d => {
         const datos = d.data();
-        return datos['habitacionNombre'] === nombreHab && datos['estado'] === 'confirmada';
+        return datos['habitacionNombre'] === nombreHab &&
+               datos['estado'] === 'confirmada' &&
+               !this.reservaHaCaducado(datos);
       });
 
       if (docReserva) {
@@ -190,13 +222,17 @@ export class Reserva implements OnInit {
     this.cdr.detectChanges();
   }
 
-  get precioNoche(): number { return this.habitacion?.precioBase || this.habitacion?.precio || 80; }
+  get precioNoche(): number {
+    return this.habitacion?.precioBase || this.habitacion?.precio || 80;
+  }
+
   get diasTotales(): number {
     if (!this.fromDate || !this.toDate) return 0;
     const f1 = new Date(this.fromDate.year, this.fromDate.month - 1, this.fromDate.day);
-    const f2 = new Date(this.toDate.year, this.toDate.month - 1, this.toDate.day);
+    const f2 = new Date(this.toDate.year,   this.toDate.month - 1,   this.toDate.day);
     return Math.round((f2.getTime() - f1.getTime()) / (1000 * 3600 * 24));
   }
+
   get totalPagar(): number {
     let total = this.diasTotales * this.precioNoche;
     if (this.quiereLimpieza) total += this.precioLimpieza;
@@ -206,7 +242,7 @@ export class Reserva implements OnInit {
 
   abrirModal() {
     if (!this.usuarioActual) {
-      alert("Inicie sesión para reservar una suite.");
+      alert('Inicie sesión para reservar una suite.');
       return;
     }
     this.modalAbierto = true;
@@ -214,12 +250,12 @@ export class Reserva implements OnInit {
   }
 
   cerrarModal() { this.modalAbierto = false; }
-  siguiente() { if (this.paso < 3) this.paso++; }
-  atras() { if (this.paso > 1) this.paso--; }
+  siguiente()   { if (this.paso < 3) this.paso++; }
+  atras()       { if (this.paso > 1) this.paso--; }
 
   async finalizarPago() {
     if (!this.usuarioActual) {
-      alert("Inicie sesión para reservar una suite.");
+      alert('Inicie sesión para reservar una suite.');
       return;
     }
 
@@ -240,9 +276,9 @@ export class Reserva implements OnInit {
         this.cdr.detectChanges();
       },
       error: (error) => {
-        console.error("Error técnico:", error);
+        console.error('Error técnico:', error);
         this.procesandoPago = false;
-        alert("Error al conectar con el servidor de pagos.");
+        alert('Error al conectar con el servidor de pagos.');
       }
     });
   }
@@ -256,7 +292,7 @@ export class Reserva implements OnInit {
     });
 
     if (resultado.error) {
-      alert("Error en el pago: " + resultado.error.message);
+      alert('Error en el pago: ' + resultado.error.message);
       this.procesandoPago = false;
     } else {
       await this.guardarReservaEnFirebase();
@@ -268,16 +304,16 @@ export class Reserva implements OnInit {
       const nombreHab = this.habitacion?.nombre || this.habitacion?.Nombre || 'Desconocida';
 
       const nuevaReserva = {
-        idUsuario: this.usuarioActual!.uid,
-        emailUsuario: this.usuarioActual!.email,
+        idUsuario:        this.usuarioActual!.uid,
+        emailUsuario:     this.usuarioActual!.email,
         habitacionNombre: nombreHab,
-        fechaEntrada: new Date(this.fromDate!.year, this.fromDate!.month - 1, this.fromDate!.day).toISOString(),
-        fechaSalida: new Date(this.toDate!.year, this.toDate!.month - 1, this.toDate!.day).toISOString(),
-        diasTotales: this.diasTotales,
-        totalPagado: this.totalPagar,
-        extras: { limpieza: this.quiereLimpieza, desayuno: this.quiereDesayuno },
-        estado: 'confirmada',
-        fechaCreacion: new Date().toISOString()
+        fechaEntrada:     new Date(this.fromDate!.year, this.fromDate!.month - 1, this.fromDate!.day).toISOString(),
+        fechaSalida:      new Date(this.toDate!.year,   this.toDate!.month - 1,   this.toDate!.day).toISOString(),
+        diasTotales:      this.diasTotales,
+        totalPagado:      this.totalPagar,
+        extras:           { limpieza: this.quiereLimpieza, desayuno: this.quiereDesayuno },
+        estado:           'confirmada',
+        fechaCreacion:    new Date().toISOString()
       };
 
       const docRef = await addDoc(collection(this.firestore, 'reservas'), nuevaReserva);

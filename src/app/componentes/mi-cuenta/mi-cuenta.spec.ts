@@ -1,0 +1,24 @@
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MiCuenta } from './mi-cuenta.component';
+
+
+
+describe('MiCuenta', () => {
+  let component: MiCuenta;
+  let fixture: ComponentFixture<MiCuenta>;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      declarations: [MiCuenta]
+    })
+    .compileComponents();
+
+    fixture = TestBed.createComponent(MiCuenta);
+    component = fixture.componentInstance;
+    await fixture.whenStable();
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+});

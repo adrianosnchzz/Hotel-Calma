@@ -1,12 +1,10 @@
 /* =========================================
-   1. OVERLAY (Fondo oscuro borroso)
+   1. OVERLAY (sin cambios respecto al original)
    ========================================= */
 .modal-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
   background: rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(5px);
   display: flex;
@@ -16,7 +14,7 @@
 }
 
 /* =========================================
-   2. TARJETA DEL FORMULARIO
+   2. TARJETA DEL FORMULARIO (sin cambios)
    ========================================= */
 .modal-content {
   background: white;
@@ -29,18 +27,11 @@
 
   .btn-cerrar {
     position: absolute;
-    top: 15px;
-    right: 20px;
-    background: none;
-    border: none;
-    font-size: 1.5rem;
-    color: #555;
-    cursor: pointer;
-    transition: color 0.3s;
-
-    &:hover {
-      color: #d90429;
-    }
+    top: 15px; right: 20px;
+    background: none; border: none;
+    font-size: 1.5rem; color: #555;
+    cursor: pointer; transition: color 0.3s;
+    &:hover { color: #d90429; }
   }
 
   .tabs {
@@ -49,93 +40,238 @@
     border-bottom: 2px solid #eee;
 
     button {
-      flex: 1;
-      padding: 10px;
-      background: none;
-      border: none;
-      font-weight: 600;
-      color: #777;
-      cursor: pointer;
-      transition: all 0.3s;
-      font-size: 1rem;
-
-      &.activo {
-        color: #1b4332;
-        border-bottom: 3px solid #1b4332;
-      }
-
-      &:hover:not(.activo) {
-        color: #2d6a4f;
-      }
+      flex: 1; padding: 10px;
+      background: none; border: none;
+      font-weight: 600; color: #777;
+      cursor: pointer; transition: all 0.3s; font-size: 1rem;
+      &.activo { color: #1b4332; border-bottom: 3px solid #1b4332; }
+      &:hover:not(.activo) { color: #2d6a4f; }
     }
   }
 
-  /* =========================================
-     3. INPUTS Y ERRORES
-     ========================================= */
   .grupo-input {
     margin-bottom: 1.2rem;
-
     label {
-      display: block;
-      font-weight: 600;
-      margin-bottom: 0.5rem;
-      color: #333;
-      font-size: 0.9rem;
+      display: block; font-weight: 600;
+      margin-bottom: 0.5rem; color: #333; font-size: 0.9rem;
     }
-
     input {
-      width: 100%;
-      padding: 0.8rem;
-      border: 1px solid #ccc;
-      border-radius: 10px;
-      transition: all 0.3s;
-
-      &:focus {
-        outline: none;
-        border-color: #2d6a4f;
-        box-shadow: 0 0 5px rgba(45, 106, 79, 0.3);
-      }
-
-      &.input-error {
-        border-color: #d90429 !important;
-        box-shadow: 0 0 5px rgba(217, 4, 41, 0.2) !important;
-      }
+      width: 100%; padding: 0.8rem;
+      border: 1px solid #ccc; border-radius: 10px; transition: all 0.3s;
+      &:focus { outline: none; border-color: #2d6a4f; box-shadow: 0 0 5px rgba(45,106,79,0.3); }
+      &.input-error { border-color: #d90429 !important; box-shadow: 0 0 5px rgba(217,4,41,0.2) !important; }
     }
-
-    .error-msg {
-      display: block;
-      color: #d90429;
-      font-size: 0.8rem;
-      margin-top: 0.3rem;
-      font-weight: 500;
-    }
+    .error-msg { display: block; color: #d90429; font-size: 0.8rem; margin-top: 0.3rem; font-weight: 500; }
   }
 
-  /* =========================================
-     4. BOTÓN DE CONFIRMAR
-     ========================================= */
   .btn-confirmar {
-    width: 100%;
-    padding: 1rem;
-    background: #1b4332;
-    color: white;
-    border: none;
-    border-radius: 10px;
-    font-weight: bold;
-    font-size: 1.1rem;
-    cursor: pointer;
-    margin-top: 1rem;
-    transition: all 0.3s;
-
-    &:hover:not(:disabled) {
-      background: #2d6a4f;
-    }
-
-    &:disabled {
-      background: #a3b18a;
-      cursor: not-allowed;
-      opacity: 0.7;
-    }
+    width: 100%; padding: 1rem;
+    background: #1b4332; color: white;
+    border: none; border-radius: 10px;
+    font-weight: bold; font-size: 1.1rem;
+    cursor: pointer; margin-top: 1rem; transition: all 0.3s;
+    &:hover:not(:disabled) { background: #2d6a4f; }
+    &:disabled { background: #a3b18a; cursor: not-allowed; opacity: 0.7; }
   }
+}
+
+/* =========================================
+   3. DROPDOWN MI CUENTA (NUEVO)
+   ========================================= */
+
+/* Botón disparador en el navbar */
+.cuenta-trigger {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.9rem 0.4rem 0.5rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+  user-select: none;
+
+  &:hover,
+  &.abierto {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.35);
+  }
+}
+
+/* Inicial del nombre como avatar */
+.cuenta-avatar-sm {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #2d6a4f;
+  color: #fff;
+  font-weight: 800;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  letter-spacing: 0;
+}
+
+.cuenta-nombre-nav {
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.9rem;
+  max-width: 110px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cuenta-chevron {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.7rem;
+  transition: transform 0.2s;
+}
+
+.cuenta-trigger.abierto .cuenta-chevron {
+  transform: rotate(180deg);
+}
+
+/* Panel desplegable */
+.cuenta-dropdown {
+  display: none;
+  position: absolute;
+  top: calc(100% + 12px);
+  right: 0;
+  min-width: 260px;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.18);
+  z-index: 9999;
+  overflow: hidden;
+  animation: dropIn 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.cuenta-trigger.abierto .cuenta-dropdown {
+  display: block;
+}
+
+@keyframes dropIn {
+  from { opacity: 0; transform: translateY(-10px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0)     scale(1); }
+}
+
+/* Cabecera del dropdown con avatar grande */
+.dropdown-perfil {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  padding: 1.1rem 1.2rem;
+  background: linear-gradient(135deg, #1b4332 0%, #2d6a4f 100%);
+}
+
+.dropdown-avatar-grande {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  color: #fff;
+  font-weight: 800;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.dropdown-perfil-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  overflow: hidden;
+}
+
+.dp-nombre {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dp-email {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.7);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Separador */
+.dropdown-sep {
+  height: 1px;
+  background: #f0ece6;
+}
+
+/* Opciones del menú */
+.dropdown-opcion {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.85rem 1.2rem;
+  text-decoration: none;
+  background: none;
+  border: none;
+  width: 100%;
+  cursor: pointer;
+  transition: background 0.15s;
+  color: #222;
+
+  &:hover {
+    background: #f8f5f0;
+    color: #1b4332;
+    text-decoration: none;
+
+    .opcion-arrow { transform: translateX(3px); }
+  }
+
+  &.logout {
+    color: #c0392b;
+    &:hover { background: #fff5f5; color: #c0392b; }
+  }
+}
+
+.opcion-icono {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: #f0ece6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  flex-shrink: 0;
+  color: #1b4332;
+  transition: background 0.15s;
+
+  .dropdown-opcion:hover & { background: #d8f3dc; }
+  .logout & { background: #fde8e8; color: #c0392b; }
+  .logout:hover & { background: #fbd5d5; }
+}
+
+.opcion-texto {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  flex: 1;
+  text-align: left;
+
+  strong { font-size: 0.88rem; font-weight: 700; }
+  small  { font-size: 0.74rem; color: #888; font-weight: 400; }
+}
+
+.opcion-arrow {
+  font-size: 0.7rem;
+  color: #bbb;
+  transition: transform 0.15s;
 }
