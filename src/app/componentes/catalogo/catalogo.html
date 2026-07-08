@@ -15,7 +15,7 @@
               </div>
             </ng-container>
             <div *ngIf="!hab.fotos || hab.fotos.length === 0" class="carousel-item active h-100">
-              <img [src]="hab.imagenUrl || hab.foto" class="d-block w-100 h-100" style="object-fit: cover;">
+              <img [src]="hab.imagenUrl || hab.foto" class="d-block w-100 h-100" style="object-fit: cover;" alt="Habitación por defecto">
             </div>
           </div>
 
@@ -35,13 +35,13 @@
           <span class="badge-premium">{{ hab.estado || 'DESTACADO' }}</span>
           <h2 class="titulo-hab">{{ hab.nombre || hab.Nombre || 'Suite Turística' }}</h2>
           <p class="desc-hab">{{ hab.descripcion || 'Sin descripción disponible actualmente.' }}</p>
+          
           <div class="servicios">
             <span><i class="bi bi-people"></i> {{ hab.capacidadMaxima || hab.capacidad || 0 }} Personas</span>
             <span><i class="bi bi-wifi"></i> WiFi 6</span>
             <span><i class="bi bi-snow"></i> A/C</span>
           </div>
 
-          <!-- RESEÑAS con separación -->
           <div class="resenas-bloque">
             <app-resena [habitacion]="hab"></app-resena>
           </div>
@@ -51,7 +51,14 @@
               <span class="num">{{ hab.precioBase || hab.precio || 0 }}€</span>
               <span class="txt">/ noche</span>
             </div>
-            <app-reserva [habitacion]="hab" class="w-100"></app-reserva>
+            
+            <a href="https://wa.me/34622595670?text=¡Hola!%20Estoy%20interesado%20en%20obtener%20más%20información%20y%20reservar%20la%20habitacion:%20{{hab.nombre || hab.Nombre || 'Suite Calma'}}" 
+               target="_blank" 
+               rel="noopener noreferrer"
+               class="btn-reserva-pro w-100 d-flex align-items-center justify-content-center gap-2 text-white" 
+               style="background: #25D366; text-decoration: none; border: none; text-transform: none;">
+              <i class="bi bi-whatsapp"></i> Reservar por WhatsApp
+            </a>
           </div>
         </div>
 
@@ -60,19 +67,20 @@
   </section>
 </div>
 
-<!-- MODAL FOTOS -->
 <div class="modal-foto" *ngIf="modalAbierto" (click)="cerrarModal()">
   <button class="btn-cerrar-modal" (click)="cerrarModal()">
     <i class="bi bi-x-lg"></i>
   </button>
   <div class="modal-foto-inner" (click)="$event.stopPropagation()">
     <img [src]="fotoModal" class="foto-modal-img" alt="Foto ampliada">
+    
     <button class="modal-prev" (click)="modalAnterior()" *ngIf="fotosModal.length > 1">
       <i class="bi bi-chevron-left"></i>
     </button>
     <button class="modal-next" (click)="modalSiguiente()" *ngIf="fotosModal.length > 1">
       <i class="bi bi-chevron-right"></i>
     </button>
+    
     <div class="modal-indicadores" *ngIf="fotosModal.length > 1">
       <span *ngFor="let f of fotosModal; let j = index"
             [class.activo]="j === indexModal"

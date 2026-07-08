@@ -1,0 +1,70 @@
+<div class="galeria-page">
+  
+  <div class="galeria-header text-center">
+    <h1>Galería Fotográfica</h1>
+    <p>Un recorrido visual por el silencio, el diseño y la naturaleza de Alojamientos CALMA</p>
+    <div class="linea-decorativa"></div>
+  </div>
+
+  <div class="galeria-filtros container text-center mb-5">
+    <div class="btn-group-filtros">
+      <button class="btn-filtro" [class.activo]="categoriaActiva === 'todas'" (click)="seleccionarCategoria('todas')">
+        Todo el complejo
+      </button>
+      <button class="btn-filtro" [class.activo]="categoriaActiva === 'entrada'" (click)="seleccionarCategoria('entrada')">
+        Entrada
+      </button>
+      <button class="btn-filtro" [class.activo]="categoriaActiva === 'salon-cocina'" (click)="seleccionarCategoria('salon-cocina')">
+        Salón-Cocina
+      </button>
+      <button class="btn-filtro" [class.activo]="categoriaActiva === 'patio'" (click)="seleccionarCategoria('patio')">
+        Patio
+      </button>
+      <button class="btn-filtro" [class.activo]="categoriaActiva === 'azotea'" (click)="seleccionarCategoria('azotea')">
+        Azotea
+      </button>
+      <button class="btn-filtro" [class.activo]="categoriaActiva === 'paisajes'" (click)="seleccionarCategoria('paisajes')">
+        Paisajes
+      </button>
+    </div>
+  </div>
+
+  <div class="galeria-grid container">
+    <div *ngFor="let foto of fotosFiltradas; let i = index" 
+         class="galeria-item" 
+         (click)="abrirLightbox(i)">
+      <img [ngSrc]="foto.url" [alt]="foto.titulo" width="400" height="300">
+      <div class="galeria-overlay">
+        <span class="categoria">{{ (foto.categoria === 'salon-cocina' ? 'Salón-Cocina' : foto.categoria) | uppercase }}</span>
+        <h3>{{ foto.titulo }}</h3>
+        <i class="bi bi-arrows-fullscreen"></i>
+      </div>
+    </div>
+  </div>
+
+  <div class="text-center my-5 py-5" *ngIf="fotosFiltradas.length === 0">
+    <i class="bi bi-camera text-muted" style="font-size: 2.5rem;"></i>
+    <p class="text-muted mt-3">Fotografías en proceso de revelado artístico.</p>
+  </div>
+
+</div>
+
+<div class="lightbox" *ngIf="lightboxAbierto" (click)="cerrarLightbox()">
+  <button class="btn-cerrar" (click)="cerrarLightbox()">✕</button>
+
+  <div class="lightbox-content" (click)="$event.stopPropagation()">
+    <img [src]="fotosFiltradas[indexActivo].url" [alt]="fotosFiltradas[indexActivo].titulo">
+    
+    <div class="lightbox-info">
+      <span class="badge-calma">{{ (fotosFiltradas[indexActivo].categoria === 'salon-cocina' ? 'Salón-Cocina' : fotosFiltradas[indexActivo].categoria) | uppercase }}</span>
+      <h3>{{ fotosFiltradas[indexActivo].titulo }}</h3>
+    </div>
+
+    <button class="control-prev" (click)="anteriorFoto()" *ngIf="fotosFiltradas.length > 1">
+      <i class="bi bi-chevron-left"></i>
+    </button>
+    <button class="control-next" (click)="siguienteFoto()" *ngIf="fotosFiltradas.length > 1">
+      <i class="bi bi-chevron-right"></i>
+    </button>
+  </div>
+</div>

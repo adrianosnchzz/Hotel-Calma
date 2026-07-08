@@ -13,10 +13,11 @@
         </button>
       </div>
       <div class="resenas-media" *ngIf="resenas.length === 0">
-        <span class="sin-txt">Sin reseñas aun</span>
+        <span class="sin-txt">Sin reseñas aún</span>
       </div>
     </div>
 
+    <!-- Botón Valorar: Visible solo para registrados -->
     <button class="btn-valorar" *ngIf="puedeResenar" (click)="abrirModal()">
       <i class="bi" [class.bi-star-fill]="miResena" [class.bi-star]="!miResena"></i>
       {{ miResena ? 'Tu reseña' : 'Valorar' }}
@@ -41,7 +42,7 @@
       <p class="resena-comentario">{{ resenas[0].comentario }}</p>
     </div>
     <p class="ver-mas-hint" *ngIf="resenas.length > 1" (click)="abrirPopupResenas()">
-      + {{ resenas.length - 1 }} reseña{{ resenas.length - 1 > 1 ? 's' : '' }} mas
+      + {{ resenas.length - 1 }} reseña{{ resenas.length - 1 > 1 ? 's' : '' }} más
     </p>
   </div>
 
@@ -100,7 +101,7 @@
             (click)="setEstrella(s)">★</span>
     </div>
 
-    <p class="pick-label" *ngIf="form.valoracion === 0">Selecciona una puntuacion</p>
+    <p class="pick-label" *ngIf="form.valoracion === 0">Selecciona una puntuación</p>
     <p class="pick-label" *ngIf="form.valoracion === 1"> Deficiente</p>
     <p class="pick-label" *ngIf="form.valoracion === 2"> Regular</p>
     <p class="pick-label" *ngIf="form.valoracion === 3"> Bueno</p>
@@ -109,7 +110,7 @@
 
     <textarea
       class="resena-textarea"
-      placeholder="Cuentanos tu experiencia..."
+      placeholder="Cuéntanos tu experiencia..."
       [(ngModel)]="form.comentario"
       rows="4"
       maxlength="400">

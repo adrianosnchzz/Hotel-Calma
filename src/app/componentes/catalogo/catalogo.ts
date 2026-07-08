@@ -1,5 +1,5 @@
 import { Component, afterNextRender, inject, OnInit, PLATFORM_ID, ChangeDetectorRef } from '@angular/core';
-import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { CommonModule, isPlatformBrowser, NgOptimizedImage } from '@angular/common'; // 👈 NgOptimizedImage añadido
 import * as AOS from 'aos';
 
 import { Firestore, collection, getDocs, addDoc, Timestamp } from '@angular/fire/firestore';
@@ -7,11 +7,10 @@ import { Firestore, collection, getDocs, addDoc, Timestamp } from '@angular/fire
 import { Reserva } from '../../reserva/reserva'; 
 import { Resenas } from '../resenas/resenas';
 
-
 @Component({
   selector: 'app-catalogo',
   standalone: true,
-  imports: [CommonModule, Reserva, Resenas], 
+  imports: [CommonModule, NgOptimizedImage, Reserva, Resenas], // 👈 Añadido a los imports
   templateUrl: './catalogo.html',
   styleUrls: ['./catalogo.scss']
 })
@@ -31,7 +30,7 @@ export class Catalogo implements OnInit {
     afterNextRender(async () => {
       const { Carousel } = await import('bootstrap');
       document.querySelectorAll('.carousel').forEach(el => new Carousel(el));
-      AOS.init({ duration: 1000, once: false });
+      AOS.init({ duration: 800, once: true }); // Reducido el tiempo de animación para mayor fluidez percibida
     });
   }
 
@@ -47,13 +46,10 @@ export class Catalogo implements OnInit {
         });
         
         this.habitaciones = tempHabitaciones;
-        console.log('¡Exito! Habitaciones cargadas:', this.habitaciones);
-
-        
-        this.cdr.detectChanges();
+        this.cdr.markForCheck(); // Uso más eficiente de la detección de cambios
 
         if (typeof window !== 'undefined') {
-          setTimeout(() => AOS.refresh(), 500);
+          setTimeout(() => AOS.refresh(), 200);
         }
       } catch (error) {
         console.error("Error al cargar habitaciones desde Firebase:", error);
@@ -73,14 +69,11 @@ export class Catalogo implements OnInit {
         fechaReserva: Timestamp.now(),
         estado: 'PENDIENTE'
       });
-      alert('¡Reserva realizada con éxito! Se ha guardado en tu base de datos.');
+      alert('¡Reserva realizada con éxito!');
     } catch (error) {
       console.error('Error al guardar la reserva:', error);
-      alert('Error al conectar con Firebase.');
     }
   }
-
-  // --- Lógica de Modales ---
 
   abrirModal(hab: any, i: number) {
     this.fotosModal = hab.fotos?.length > 0 ? hab.fotos : [hab.imagenUrl];

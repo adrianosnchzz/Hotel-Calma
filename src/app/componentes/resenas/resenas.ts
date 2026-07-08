@@ -27,7 +27,7 @@ export class Resenas implements OnInit {
 
   resenas: any[] = [];
   miResena: any = null;
-  puedeResenar = false;
+  puedeResenar = false; // Controlará si el usuario está registrado
 
   modalAbierto  = false;
   popupAbierto  = false;
@@ -39,8 +39,8 @@ export class Resenas implements OnInit {
     authState(this.auth).subscribe(async (user: User | null) => {
       this.usuarioActual = user;
       if (user) {
+        this.puedeResenar = true; // ¡Con solo estar registrado ya puede valorar!
         await this.cargarNombreUsuario(user.uid);
-        await this.verificarReserva(user.uid);
         await this.cargarMiResena(user.uid);
       } else {
         this.puedeResenar = false;
@@ -61,24 +61,6 @@ export class Resenas implements OnInit {
       const docU = snap.docs.find(d => d.id === uid);
       this.nombreUsuario = docU?.data()['nombre'] || 'Usuario';
     } catch (e) { this.nombreUsuario = 'Usuario'; }
-  }
-
-  async verificarReserva(uid: string) {
-    try {
-      // Traemos todas las reservas del usuario y comparamos nombre sin distinguir mayúsculas/acentos
-      const q = query(
-        collection(this.firestore, 'reservas'),
-        where('idUsuario', '==', uid)
-      );
-      const snap = await getDocs(q);
-      const normalizar = (s: string) =>
-        s?.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim() ?? '';
-
-      this.puedeResenar = snap.docs.some(d => {
-        const nombre = d.data()['habitacionNombre'] ?? '';
-        return normalizar(nombre) === normalizar(this.nombreHab);
-      });
-    } catch (e) { this.puedeResenar = false; }
   }
 
   async cargarResenas() {
@@ -157,7 +139,7 @@ export class Resenas implements OnInit {
       this.cerrarModal();
     } catch (e) {
       console.error(e);
-      alert('Error al guardar la resena.');
+      alert('Error al guardar la reseña.');
     }
 
     this.enviando = false;

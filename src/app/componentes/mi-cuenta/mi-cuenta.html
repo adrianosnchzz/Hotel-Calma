@@ -1,6 +1,5 @@
 <div class="mc-page" *ngIf="!cargando">
 
-  <!-- HERO HEADER -->
   <div class="mc-hero">
     <div class="mc-hero-bg"></div>
     <div class="mc-hero-content">
@@ -16,7 +15,6 @@
     </div>
   </div>
 
-  <!-- TABS -->
   <div class="mc-tabs-wrapper">
     <div class="mc-tabs">
       <button class="mc-tab" [class.activo]="pestana === 'info'" (click)="setPestana('info')">
@@ -26,15 +24,12 @@
       <button class="mc-tab" [class.activo]="pestana === 'reservas'" (click)="setPestana('reservas')">
         <i class="bi bi-calendar2-check"></i>
         <span>Mis reservas</span>
-        <span class="mc-badge" *ngIf="reservasActivas.length > 0">{{ reservasActivas.length }}</span>
       </button>
     </div>
   </div>
 
-  <!-- CONTENIDO -->
   <div class="mc-body">
 
-    <!-- ── PANEL INFO ── -->
     <div class="mc-panel" *ngIf="pestana === 'info'">
       <div class="info-grid">
         <div class="info-item">
@@ -68,162 +63,37 @@
       </div>
     </div>
 
-    <!-- ── PANEL RESERVAS ── -->
     <div class="mc-panel" *ngIf="pestana === 'reservas'">
-
-      <!-- Sin ninguna reserva -->
-      <div class="sin-reservas" *ngIf="reservas.length === 0">
-        <div class="sr-icon"><i class="bi bi-calendar-x"></i></div>
-        <h3>Sin reservas todavía</h3>
-        <p>Cuando realices una reserva aparecerá aquí.</p>
-        <a routerLink="/habitaciones" class="btn-ver-suites">
-          <i class="bi bi-door-open"></i> Explorar suites
-        </a>
-      </div>
-
-      <!-- ── RESERVAS ACTIVAS (sin título encima) ── -->
-      <div class="reservas-grid" *ngIf="reservasActivas.length > 0">
-        <div class="reserva-card" *ngFor="let r of reservasActivas">
-
-          <div class="rc-header">
-            <div class="rc-suite">
-              <i class="bi bi-building"></i>{{ r.habitacionNombre }}
-            </div>
-            <span class="rc-estado"
-              [class.confirmada]="r.estado === 'confirmada'"
-              [class.pendiente]="r.estado === 'pendiente'"
-              [class.cancelada]="r.estado === 'cancelada'">
-              <i class="bi"
-                [class.bi-check-circle-fill]="r.estado === 'confirmada'"
-                [class.bi-clock-fill]="r.estado === 'pendiente'"
-                [class.bi-x-circle-fill]="r.estado === 'cancelada'">
-              </i>
-              {{ r.estado }}
-            </span>
-          </div>
-
-          <div class="rc-fechas">
-            <div class="rc-fecha-item">
-              <span class="rf-label">Entrada</span>
-              <span class="rf-val">{{ formatFecha(r.fechaEntrada) }}</span>
-            </div>
-            <div class="rc-fecha-sep">
-              <span class="rf-noches">{{ r.diasTotales }} noches</span>
-              <div class="rf-linea"></div>
-            </div>
-            <div class="rc-fecha-item end">
-              <span class="rf-label">Salida</span>
-              <span class="rf-val">{{ formatFecha(r.fechaSalida) }}</span>
-            </div>
-          </div>
-
-          <div class="rc-extras" *ngIf="r.extras?.desayuno || r.extras?.limpieza">
-            <span class="rc-extra" *ngIf="r.extras?.desayuno">
-              <i class="bi bi-cup-hot-fill"></i> Desayuno incluido
-            </span>
-            <span class="rc-extra" *ngIf="r.extras?.limpieza">
-              <i class="bi bi-stars"></i> Servicio de limpieza
-            </span>
-          </div>
-
-          <div class="rc-resena-bloque" *ngIf="resenaDeHabitacion(r.habitacionNombre) as resena">
-            <div class="rc-resena-header">
-              <i class="bi bi-star-fill"></i> Tu reseña
-            </div>
-            <div class="rc-resena-body">
-              <div class="rc-resena-estrellas">
-                <span *ngFor="let s of [1,2,3,4,5]" class="rc-estrella" [class.llena]="s <= resena.valoracion">★</span>
-              </div>
-              <p class="rc-resena-comentario">{{ resena.comentario }}</p>
-            </div>
-          </div>
-
-          <div class="rc-footer">
-            <span class="rc-creacion">
-              <i class="bi bi-clock-history"></i>
-              Reservado el {{ formatFecha(r.fechaCreacion) }}
-            </span>
-            <div class="rc-footer-right">
-              <span class="rc-precio">{{ r.totalPagado }} €</span>
-              <button class="btn-cancelar" *ngIf="r.estado !== 'cancelada'" (click)="cancelarReserva(r)">
-                <i class="bi bi-x-circle"></i> Cancelar
-              </button>
-            </div>
-          </div>
-
+      <div class="sin-reservas p-4 text-center">
+        <div class="sr-icon mb-3" style="font-size: 3rem; color: #25D366;">
+          <i class="bi bi-chat-left-text-fill"></i>
+        </div>
+        <h3>Gestión de Reservas</h3>
+        <p class="mx-auto" style="max-width: 500px; color: #6c757d;">
+          ¡Bienvenido, {{ usuario?.nombre || 'huésped' }}! Para ofrecerte una atención totalmente personalizada, actualmente gestionamos todas las estancias de forma manual y directa.
+        </p>
+        <p class="mx-auto font-italic small" style="max-width: 500px; color: #8c949a;">
+          Si ya tienes una reserva confirmada o deseas consultar disponibilidad, fechas, modificaciones o servicios extra, haz clic en el botón de abajo para conectar directamente con recepción.
+        </p>
+        
+        <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center align-items-center mt-4">
+          <a href="https://wa.me/34622595670?text=¡Hola!%20Soy%20{{ usuario?.nombre || 'un%20cliente' }}%20y%20me%20gustaría%20consultar%20el%20estado%20de%20mis%20reservas." 
+             target="_blank" 
+             rel="noopener noreferrer"
+             class="btn btn-success d-flex align-items-center gap-2 px-4 py-2 shadow-sm text-white"
+             style="background-color: #25D366; border: none; font-weight: 500; border-radius: 8px;">
+            <i class="bi bi-whatsapp"></i> Consultar a Recepción
+          </a>
+          
+          <a routerLink="/habitaciones" class="btn btn-outline-secondary d-flex align-items-center gap-2 px-4 py-2"
+             style="border-radius: 8px; font-weight: 500;">
+            <i class="bi bi-door-open"></i> Ver catálogo de suites
+          </a>
         </div>
       </div>
-
-      <!-- ── ESTANCIAS ANTERIORES: título SOLO si hay pasadas ── -->
-      <div *ngIf="reservasPasadas.length > 0">
-        <h4 class="seccion-pasadas">
-          <i class="bi bi-clock-history"></i> Estancias anteriores
-        </h4>
-        <div class="reservas-grid">
-          <div class="reserva-card pasada" *ngFor="let r of reservasPasadas">
-
-            <div class="rc-header">
-              <div class="rc-suite">
-                <i class="bi bi-building"></i>{{ r.habitacionNombre }}
-              </div>
-              <span class="rc-estado finalizada">
-                <i class="bi bi-check2-all"></i> Estancia finalizada
-              </span>
-            </div>
-
-            <div class="rc-fechas">
-              <div class="rc-fecha-item">
-                <span class="rf-label">Entrada</span>
-                <span class="rf-val">{{ formatFecha(r.fechaEntrada) }}</span>
-              </div>
-              <div class="rc-fecha-sep">
-                <span class="rf-noches">{{ r.diasTotales }} noches</span>
-                <div class="rf-linea"></div>
-              </div>
-              <div class="rc-fecha-item end">
-                <span class="rf-label">Salida</span>
-                <span class="rf-val">{{ formatFecha(r.fechaSalida) }}</span>
-              </div>
-            </div>
-
-            <div class="rc-extras" *ngIf="r.extras?.desayuno || r.extras?.limpieza">
-              <span class="rc-extra" *ngIf="r.extras?.desayuno">
-                <i class="bi bi-cup-hot-fill"></i> Desayuno incluido
-              </span>
-              <span class="rc-extra" *ngIf="r.extras?.limpieza">
-                <i class="bi bi-stars"></i> Servicio de limpieza
-              </span>
-            </div>
-
-            <div class="rc-resena-bloque" *ngIf="resenaDeHabitacion(r.habitacionNombre) as resena">
-              <div class="rc-resena-header">
-                <i class="bi bi-star-fill"></i> Tu reseña
-              </div>
-              <div class="rc-resena-body">
-                <div class="rc-resena-estrellas">
-                  <span *ngFor="let s of [1,2,3,4,5]" class="rc-estrella" [class.llena]="s <= resena.valoracion">★</span>
-                </div>
-                <p class="rc-resena-comentario">{{ resena.comentario }}</p>
-              </div>
-            </div>
-
-            <div class="rc-footer">
-              <span class="rc-creacion">
-                <i class="bi bi-clock-history"></i>
-                Reservado el {{ formatFecha(r.fechaCreacion) }}
-              </span>
-              <div class="rc-footer-right">
-                <span class="rc-precio">{{ r.totalPagado }} €</span>
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </div>
-
     </div>
-  </div>
 
+  </div>
 </div>
 
 <div class="mc-loading" *ngIf="cargando">
