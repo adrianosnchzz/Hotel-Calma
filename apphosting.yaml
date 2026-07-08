@@ -7,6 +7,11 @@ runConfig:
   # cpu: 1
   # memoryMiB: 512
 
+# Configuración de compilación para indicar las rutas de Angular SSR
+build:
+  buildCommand: ng build
+  outputDirectory: dist/hotel-calma
+
 # Environment variables and secrets.
 # env:
   # Configure environment variables.
@@ -16,9 +21,3 @@ runConfig:
   #   availability:
   #     - BUILD
   #     - RUNTIME
-
-  # Grant access to secrets in Cloud Secret Manager.
-  # You can create secrets with the CLI command `firebase apphosting:secrets:set <secretName>`.
-  # See https://firebase.google.com/docs/app-hosting/configure#secret-parameters
-  # - variable: MY_SECRET
-  #   secret: mySecretRef
