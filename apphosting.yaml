@@ -2,6 +2,6 @@
 runConfig:
   minInstances: 0
 
-# Configuración de compilación para Angular SSR
+# Configuración de compilación para forzar la instalación limpia de dependencias
 build:
-  buildCommand: ng build
+  buildCommand: npm install --legacy-peer-deps && ng build
