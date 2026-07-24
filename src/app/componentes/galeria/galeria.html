@@ -33,7 +33,14 @@
     <div *ngFor="let foto of fotosFiltradas; let i = index" 
          class="galeria-item" 
          (click)="abrirLightbox(i)">
-      <img [ngSrc]="foto.url" [alt]="foto.titulo" width="400" height="300">
+         
+      <!-- 💡 OPTIMIZACIÓN APLICADA AQUÍ -->
+      <!-- Usamos [src] estándar, reservamos el espacio con CSS y aplicamos carga perezosa a partir de la 6ª foto -->
+      <img [src]="foto.url" 
+           [alt]="foto.titulo" 
+           style="width: 100%; height: 300px; object-fit: cover;"
+           [loading]="i < 6 ? 'eager' : 'lazy'">
+           
       <div class="galeria-overlay">
         <span class="categoria">{{ (foto.categoria === 'salon-cocina' ? 'Salón-Cocina' : foto.categoria) | uppercase }}</span>
         <h3>{{ foto.titulo }}</h3>
@@ -53,7 +60,10 @@
   <button class="btn-cerrar" (click)="cerrarLightbox()">✕</button>
 
   <div class="lightbox-content" (click)="$event.stopPropagation()">
-    <img [src]="fotosFiltradas[indexActivo].url" [alt]="fotosFiltradas[indexActivo].titulo">
+    <!-- 💡 OPTIMIZACIÓN APLICADA EN LIGHTBOX -->
+    <img [src]="fotosFiltradas[indexActivo].url" 
+         [alt]="fotosFiltradas[indexActivo].titulo"
+         loading="lazy">
     
     <div class="lightbox-info">
       <span class="badge-calma">{{ (fotosFiltradas[indexActivo].categoria === 'salon-cocina' ? 'Salón-Cocina' : fotosFiltradas[indexActivo].categoria) | uppercase }}</span>

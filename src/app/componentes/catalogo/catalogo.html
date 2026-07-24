@@ -11,11 +11,12 @@
             <ng-container *ngIf="hab.fotos && hab.fotos.length > 0">
               <div *ngFor="let f of hab.fotos; let j = index"
                    class="carousel-item h-100" [class.active]="j === 0">
-                <img [src]="f" class="d-block w-100 h-100" style="object-fit: cover;" alt="Habitación">
+                <!-- 💡 OPTIMIZACIÓN: loading="lazy" evita que descargue todas las fotos de golpe -->
+                <img [src]="f" class="d-block w-100 h-100" style="object-fit: cover;" alt="Habitación" [loading]="j === 0 ? 'eager' : 'lazy'">
               </div>
             </ng-container>
             <div *ngIf="!hab.fotos || hab.fotos.length === 0" class="carousel-item active h-100">
-              <img [src]="hab.imagenUrl || hab.foto" class="d-block w-100 h-100" style="object-fit: cover;" alt="Habitación por defecto">
+              <img [src]="hab.imagenUrl || hab.foto" class="d-block w-100 h-100" style="object-fit: cover;" alt="Habitación por defecto" loading="lazy">
             </div>
           </div>
 
@@ -72,7 +73,8 @@
     <i class="bi bi-x-lg"></i>
   </button>
   <div class="modal-foto-inner" (click)="$event.stopPropagation()">
-    <img [src]="fotoModal" class="foto-modal-img" alt="Foto ampliada">
+    <!-- 💡 Modal optimizado también con lazy -->
+    <img [src]="fotoModal" class="foto-modal-img" alt="Foto ampliada" loading="lazy">
     
     <button class="modal-prev" (click)="modalAnterior()" *ngIf="fotosModal.length > 1">
       <i class="bi bi-chevron-left"></i>

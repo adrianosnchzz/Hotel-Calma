@@ -1,5 +1,5 @@
-import { Component, PLATFORM_ID, inject, afterNextRender } from '@angular/core';
-import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { Component, inject, afterNextRender } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import * as AOS from 'aos';
 
@@ -11,19 +11,15 @@ import * as AOS from 'aos';
   styleUrls: ['./portada.scss']
 })
 export class Portada {
-  private platformId = inject(PLATFORM_ID);
-
   constructor() {
-    // afterNextRender asegura que el código se ejecute SOLO en el navegador
     afterNextRender(() => {
-     
       AOS.init({
         duration: 1000,
-        once: true, // Esto ayuda a que no desaparezcan al hacer scroll arriba
+        once: true, // Evita que las animaciones desaparezcan al hacer scroll hacia arriba
         mirror: false
       });
       
-      // Forzamos un refresh para que detecte los elementos recién creados
+      // Forzamos un refresh para que detecte los elementos iniciales correctamente
       setTimeout(() => {
         AOS.refresh();
       }, 100);

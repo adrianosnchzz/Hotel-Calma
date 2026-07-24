@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { Auth, authState, User } from '@angular/fire/auth';
@@ -16,11 +16,9 @@ export class MiCuenta implements OnInit {
   usuario: any = null;
   cargando = true;
 
-  constructor(
-    private auth: Auth,
-    private firestore: Firestore,
-    private cdr: ChangeDetectorRef
-  ) {}
+  private auth = inject(Auth);
+  private firestore = inject(Firestore);
+  private cdr = inject(ChangeDetectorRef);
 
   ngOnInit() {
     authState(this.auth).subscribe(async (user: User | null) => {
@@ -34,6 +32,8 @@ export class MiCuenta implements OnInit {
           console.error("Error al cargar datos de usuario:", error);
           this.usuario = { uid: user.uid, email: user.email, nombre: 'Usuario' };
         }
+      } else {
+        this.usuario = null;
       }
       this.cargando = false;
       this.cdr.detectChanges();

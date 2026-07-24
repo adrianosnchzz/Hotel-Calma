@@ -5,21 +5,33 @@
       <span class="ubicacion-badge">Dónde estamos</span>
       <h2>Zahara de la Sierra</h2>
       <p>Cádiz, Andalucía · España</p>
+      
+      <!-- 💡 OPTIMIZACIÓN 1: Añadido rel="noopener noreferrer" en el enlace externo -->
       <a href="https://maps.app.goo.gl/A6WVW7wbJSoD4aW17"
          target="_blank"
+         rel="noopener noreferrer"
          class="btn-como-llegar">
         <i class="bi bi-map"></i> Cómo llegar
       </a>
     </div>
   </div>
 
-  <google-map
-    [center]="center"
-    [zoom]="zoom"
-    [options]="mapOptions"
-    width="100%"
-    height="100%">
-    <map-marker [position]="center" [options]="markerOptions" />
-  </google-map>
+  <!-- 💡 OPTIMIZACIÓN 2: Carga diferida del mapa (Requiere Angular 17+) -->
+  <!-- El mapa de Google solo se cargará cuando esta sección entre en la pantalla -->
+  @defer (on viewport) {
+    <google-map
+      [center]="center"
+      [zoom]="zoom"
+      [options]="mapOptions"
+      width="100%"
+      height="100%">
+      <map-marker [position]="center" [options]="markerOptions" />
+    </google-map>
+  } @placeholder {
+    <!-- Contenedor ligero que ocupa el espacio antes de que el usuario haga scroll -->
+    <div style="width: 100%; height: 100%; background-color: #e5e3df; display: flex; align-items: center; justify-content: center;">
+      <i class="bi bi-geo-alt" style="font-size: 2rem; color: #999;"></i>
+    </div>
+  }
 
 </section>

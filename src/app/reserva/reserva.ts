@@ -60,8 +60,7 @@ export class Reserva implements OnInit {
   }
 
   ngOnInit() {
-    this.cargarFechasOcupadas();
-
+    // Ya no bloquea la carga inicial de la página con peticiones innecesarias a Firestore
     authState(this.auth).subscribe(user => {
       this.usuarioActual = user;
       if (user) {
@@ -245,6 +244,8 @@ export class Reserva implements OnInit {
       alert('Inicie sesión para reservar una suite.');
       return;
     }
+    // Cargamos las fechas ocupadas justo en el momento en que se abre el modal
+    this.cargarFechasOcupadas();
     this.modalAbierto = true;
     this.paso = 1;
   }

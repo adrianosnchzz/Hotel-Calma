@@ -1,5 +1,5 @@
 import { Component, afterNextRender, inject, OnInit, PLATFORM_ID, ChangeDetectorRef } from '@angular/core';
-import { CommonModule, isPlatformBrowser, NgOptimizedImage } from '@angular/common'; // 👈 NgOptimizedImage añadido
+import { CommonModule, isPlatformBrowser, NgOptimizedImage } from '@angular/common';
 import * as AOS from 'aos';
 
 import { Firestore, collection, getDocs, addDoc, Timestamp } from '@angular/fire/firestore';
@@ -10,7 +10,7 @@ import { Resenas } from '../resenas/resenas';
 @Component({
   selector: 'app-catalogo',
   standalone: true,
-  imports: [CommonModule, NgOptimizedImage, Reserva, Resenas], // 👈 Añadido a los imports
+  imports: [CommonModule, NgOptimizedImage, Reserva, Resenas],
   templateUrl: './catalogo.html',
   styleUrls: ['./catalogo.scss']
 })
@@ -28,32 +28,38 @@ export class Catalogo implements OnInit {
 
   constructor() {
     afterNextRender(async () => {
+      // 1. Inicializamos Bootstrap Carousel y AOS de forma diferida tras el primer render
       const { Carousel } = await import('bootstrap');
       document.querySelectorAll('.carousel').forEach(el => new Carousel(el));
-      AOS.init({ duration: 800, once: true }); // Reducido el tiempo de animación para mayor fluidez percibida
+      AOS.init({ duration: 800, once: true }); 
+
+      // 2. Cargamos las habitaciones aquí para que la web pinte la interfaz de forma instantánea
+      this.cargarHabitaciones();
     });
   }
 
-  async ngOnInit() {
-    if (isPlatformBrowser(this.platformId)) {
-      try {
-        const habitacionesRef = collection(this.firestore, 'habitaciones');
-        const querySnapshot = await getDocs(habitacionesRef);
-        
-        const tempHabitaciones: any[] = [];
-        querySnapshot.forEach((doc) => {
-          tempHabitaciones.push({ id: doc.id, ...doc.data() });
-        });
-        
-        this.habitaciones = tempHabitaciones;
-        this.cdr.markForCheck(); // Uso más eficiente de la detección de cambios
+  ngOnInit() {
+    // El ngOnInit se queda limpio para permitir una inicialización ultrarrápida del componente
+  }
 
-        if (typeof window !== 'undefined') {
-          setTimeout(() => AOS.refresh(), 200);
-        }
-      } catch (error) {
-        console.error("Error al cargar habitaciones desde Firebase:", error);
+  private async cargarHabitaciones() {
+    try {
+      const habitacionesRef = collection(this.firestore, 'habitaciones');
+      const querySnapshot = await getDocs(habitacionesRef);
+      
+      const tempHabitaciones: any[] = [];
+      querySnapshot.forEach((doc) => {
+        tempHabitaciones.push({ id: doc.id, ...doc.data() });
+      });
+      
+      this.habitaciones = tempHabitaciones;
+      this.cdr.markForCheck();
+
+      if (typeof window !== 'undefined') {
+        setTimeout(() => AOS.refresh(), 200);
       }
+    } catch (error) {
+      console.error("Error al cargar habitaciones desde Firebase:", error);
     }
   }
 

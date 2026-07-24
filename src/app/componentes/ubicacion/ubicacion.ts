@@ -16,6 +16,9 @@ export class Ubicacion {
   mapOptions: google.maps.MapOptions = {
     disableDefaultUI: true,
     zoomControl: true,
+    // 💡 SOLUCIÓN MÓVIL: Permite hacer scroll en la web con un dedo 
+    // y evita que el mapa "atrape" la pantalla del usuario.
+    gestureHandling: 'cooperative', 
     styles: [
       { elementType: 'geometry', stylers: [{ color: '#f5f0e8' }] },
       { featureType: 'water', stylers: [{ color: '#a8d5ba' }] },
