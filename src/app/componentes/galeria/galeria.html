@@ -34,8 +34,6 @@
          class="galeria-item" 
          (click)="abrirLightbox(i)">
          
-      <!-- 💡 OPTIMIZACIÓN APLICADA AQUÍ -->
-      <!-- Usamos [src] estándar, reservamos el espacio con CSS y aplicamos carga perezosa a partir de la 6ª foto -->
       <img [src]="foto.url" 
            [alt]="foto.titulo" 
            style="width: 100%; height: 300px; object-fit: cover;"
@@ -60,7 +58,6 @@
   <button class="btn-cerrar" (click)="cerrarLightbox()">✕</button>
 
   <div class="lightbox-content" (click)="$event.stopPropagation()">
-    <!-- 💡 OPTIMIZACIÓN APLICADA EN LIGHTBOX -->
     <img [src]="fotosFiltradas[indexActivo].url" 
          [alt]="fotosFiltradas[indexActivo].titulo"
          loading="lazy">

@@ -1,4 +1,4 @@
-import { Component, afterNextRender, inject, OnInit, PLATFORM_ID, ChangeDetectorRef } from '@angular/core';
+import { Component, afterNextRender, inject, OnInit, PLATFORM_ID, ChangeDetectorRef, HostListener } from '@angular/core';
 import { CommonModule, isPlatformBrowser, NgOptimizedImage } from '@angular/common';
 import * as AOS from 'aos';
 
@@ -33,14 +33,12 @@ export class Catalogo implements OnInit {
       document.querySelectorAll('.carousel').forEach(el => new Carousel(el));
       AOS.init({ duration: 800, once: true }); 
 
-      // 2. Cargamos las habitaciones aquí para que la web pinte la interfaz de forma instantánea
+      // 2. Cargamos las habitaciones
       this.cargarHabitaciones();
     });
   }
 
-  ngOnInit() {
-    // El ngOnInit se queda limpio para permitir una inicialización ultrarrápida del componente
-  }
+  ngOnInit() {}
 
   private async cargarHabitaciones() {
     try {
@@ -55,7 +53,7 @@ export class Catalogo implements OnInit {
       this.habitaciones = tempHabitaciones;
       this.cdr.markForCheck();
 
-      if (typeof window !== 'undefined') {
+      if (isPlatformBrowser(this.platformId)) {
         setTimeout(() => AOS.refresh(), 200);
       }
     } catch (error) {
@@ -82,16 +80,23 @@ export class Catalogo implements OnInit {
   }
 
   abrirModal(hab: any, i: number) {
-    this.fotosModal = hab.fotos?.length > 0 ? hab.fotos : [hab.imagenUrl];
+    this.fotosModal = hab.fotos?.length > 0 ? hab.fotos : [hab.imagenUrl || hab.foto];
     const carousel = document.querySelector(`#carouselHab${i}`);
     const activeIndex = carousel ? Array.from(carousel.querySelectorAll('.carousel-item')).findIndex(el => el.classList.contains('active')) : 0;
     this.indexModal = activeIndex >= 0 ? activeIndex : 0;
     this.fotoModal = this.fotosModal[this.indexModal];
     this.modalAbierto = true;
+
+    if (isPlatformBrowser(this.platformId)) {
+      document.body.style.overflow = 'hidden';
+    }
   }
 
   cerrarModal() {
     this.modalAbierto = false;
+    if (isPlatformBrowser(this.platformId)) {
+      document.body.style.overflow = '';
+    }
   }
 
   modalSiguiente() {
@@ -105,7 +110,22 @@ export class Catalogo implements OnInit {
   }
   
   irAUbicacion() {
-    const el = document.querySelector('app-ubicacion');
-    el?.scrollIntoView({ behavior: 'smooth' });
+    if (isPlatformBrowser(this.platformId)) {
+      const el = document.querySelector('app-ubicacion');
+      el?.scrollIntoView({ behavior: 'smooth' });
+    }
+  }
+
+  @HostListener('document:keydown', ['$event'])
+  handleKeyboardEvent(event: KeyboardEvent) {
+    if (!this.modalAbierto) return;
+
+    if (event.key === 'Escape') {
+      this.cerrarModal();
+    } else if (event.key === 'ArrowLeft') {
+      this.modalAnterior();
+    } else if (event.key === 'ArrowRight') {
+      this.modalSiguiente();
+    }
   }
 }
