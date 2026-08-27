@@ -1,0 +1,41 @@
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-6 col-md-8">
+      <div class="card shadow border-0 rounded-4">
+        <div class="card-header bg-dark text-white p-4 rounded-top-4">
+          <h2 class="h5 mb-0 fw-bold">Generador de Enlaces para WhatsApp</h2>
+        </div>
+        <div class="card-body p-4">
+          <div class="mb-3">
+            <label class="form-label small fw-semibold">Nombre del Alojamiento / Suite</label>
+            <input type="text" [(ngModel)]="suite" class="form-control">
+          </div>
+
+          <div class="row">
+            <div class="col-4 mb-3">
+              <label class="form-label small fw-semibold">Noches</label>
+              <input type="number" [(ngModel)]="noches" class="form-control">
+            </div>
+            <div class="col-4 mb-3">
+              <label class="form-label small fw-semibold">Huéspedes</label>
+              <input type="number" [(ngModel)]="huespedes" class="form-control">
+            </div>
+            <div class="col-4 mb-3">
+              <label class="form-label small fw-semibold">Precio Total (€)</label>
+              <input type="number" [(ngModel)]="total" class="form-control">
+            </div>
+          </div>
+
+          <div class="p-3 bg-light rounded-3 mb-4 border">
+            <small class="text-muted d-block mb-1 fw-bold">Enlace generado:</small>
+            <code class="small text-break">{{ obtenerLink() }}</code>
+          </div>
+
+          <button (click)="copiarMensajeWhatsApp()" class="btn btn-success w-100 py-3 fw-bold rounded-3">
+            {{ copiado ? '¡Mensaje Copiado al Portapapeles! 📋' : 'Copiar Mensaje para WhatsApp 💬' }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

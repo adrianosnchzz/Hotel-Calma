@@ -15,12 +15,14 @@
   "main": "lib/index.js",
   "dependencies": {
     "cors": "^2.8.6",
-    "firebase-admin": "^13.6.0",
-    "firebase-functions": "^7.0.0",
+    "firebase-admin": "^13.1.0",
+    "firebase-functions": "^7.3.2",
+    "redsys-easy": "^5.3.2",
     "stripe": "^22.0.1"
   },
   "devDependencies": {
     "@types/cors": "^2.8.19",
+    "@types/node": "^26.3.0",
     "firebase-functions-test": "^3.4.1",
     "typescript": "^6.0.0"
   },

@@ -1,0 +1,64 @@
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-7 col-md-9">
+      
+      <div class="card card-checkout shadow-lg border-0 rounded-4">
+        <div class="card-header bg-dark text-white p-4 rounded-top-4 text-center">
+          <h2 class="h4 mb-0 fw-bold">Confirmación y Pago de Reserva</h2>
+        </div>
+
+        <div class="card-body p-4">
+          <div class="reserva-detalles pb-3 mb-4 border-bottom">
+            <h3 class="h5 fw-bold text-primary mb-3">{{ reserva.suite }}</h3>
+            <div class="d-flex justify-content-between mb-2">
+              <span class="text-muted">Estancia</span>
+              <span class="fw-semibold">{{ reserva.noches }} noches</span>
+            </div>
+            <div class="d-flex justify-content-between mb-2">
+              <span class="text-muted">Huéspedes</span>
+              <span class="fw-semibold">{{ reserva.huespedes }} personas</span>
+            </div>
+          </div>
+
+          <div class="reserva-total bg-light p-3 rounded-3 mb-4">
+            <div class="d-flex justify-content-between align-items-center">
+              <div>
+                <span class="h5 mb-0 d-block fw-bold">Total a pagar:</span>
+                <small class="text-muted">(Impuestos e IVA incluidos)</small>
+              </div>
+              <span class="display-6 fw-bold text-success">
+                {{ reserva.precioTotal | currency:'EUR':'symbol':'1.2-2' }}
+              </span>
+            </div>
+          </div>
+
+          <div class="pago-metodos-box p-3 rounded-3 mb-4 border">
+            <p class="small fw-bold text-muted mb-2 text-uppercase">Métodos de pago aceptados:</p>
+            <div class="d-flex gap-2 flex-wrap">
+              <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-3 py-2">
+                Tarjeta de Crédito / Débito (Visa, Mastercard)
+              </span>
+              <span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-2">
+                Bizum
+              </span>
+            </div>
+          </div>
+
+          <button 
+            type="button" 
+            class="btn btn-primary btn-lg w-100 py-3 fw-bold rounded-3 shadow-sm d-flex align-items-center justify-content-center gap-2"
+            [disabled]="cargando" 
+            (click)="iniciarPagoRedsys()">
+            <span *ngIf="cargando" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            <span>{{ cargando ? 'Redirigiendo a pasarela segura BBVA...' : 'Pagar ahora' }}</span>
+          </button>
+
+          <p class="text-center text-muted small mt-3 mb-0">
+            Serás redirigido al entorno seguro del banco BBVA / Redsys para completar el pago.
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

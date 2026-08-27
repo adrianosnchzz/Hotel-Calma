@@ -1,0 +1,43 @@
+<main class="legal-container">
+  <article *ngIf="type === 'aviso-legal'" class="legal-content">
+    <h1>Aviso Legal</h1>
+    <p>En cumplimiento del artículo 10 de la Ley 34/2002, de 11 de julio, de Servicios de la Sociedad de la Información y Comercio Electrónico (LSSI-CE), se facilitan los datos identificativos del titular del sitio web:</p>
+    <ul>
+      <li><strong>Razon Social:</strong> Omu mobiliario s.l.</li>
+      <li><strong>Nombre Comercial:</strong> Alojamientos Calma</li>
+      <li><strong>CIF:</strong> B 90032863</li>
+      <li><strong>Domicilio Social:</strong> Camino de Gandul s/n, 41510 Mairena del Alcor (Sevilla) - Apartado de correos 68</li>
+      <li><strong>Sitio Web:</strong> alojamientoscalma.es</li>
+      <li><strong>Email de Contacto:</strong> contacto&#64;alojamientoscalma.es</li>
+    </ul>
+  </article>
+
+  <article *ngIf="type === 'terminos'" class="legal-content">
+    <h1>Términos y Condiciones de Contratación</h1>
+    <p>Las presentes condiciones regulan la contratación de reservas turísticas a través de alojamientoscalma.es, operado por <strong>Omu mobiliario s.l.</strong></p>
+    
+    <h2>1. Precios e Impuestos</h2>
+    <p>Todos los precios mostrados en el sitio web figuran expresados en Euros (€) e incluyen el Impuesto sobre el Valor Añadido (IVA) aplicable.</p>
+    
+    <h2>2. Métodos de Pago</h2>
+    <p>Los pagos se procesan de forma segura a través de pasarela TPV Virtual BBVA / Redsys[cite: 1]. Métodos aceptados:</p>
+    <ul>
+      <li>Tarjeta de Crédito / Débito (Visa, Mastercard)</li>
+      <li>Bizum</li>
+    </ul>
+
+    <h2>3. Cancelaciones y Reservas</h2>
+    <p>Las condiciones de cancelación, política de reembolsos y horarios de check-in / check-out se indican expresamente en el proceso previo a la confirmación de la reserva.</p>
+  </article>
+
+  <article *ngIf="type === 'privacidad'" class="legal-content">
+    <h1>Política de Privacidad</h1>
+    <p>Conforme al RGPD y a la LOPDGDD, los datos personales facilitados serán tratados bajo la responsabilidad de <strong>Omu mobiliario s.l.</strong> (CIF: B 90032863) únicamente para gestionar las solicitudes de reserva y el cobro de los servicios.</p>
+    <p>Puede ejercer sus derechos de acceso, rectificación, supresión u oposición dirigiéndose a contacto&#64;alojamientoscalma.es.</p>
+  </article>
+
+  <article *ngIf="type === 'cookies'" class="legal-content">
+    <h1>Política de Cookies</h1>
+    <p>El sitio web alojamientoscalma.es emplea únicamente cookies técnicas indispensables para posibilitar el proceso de reserva y la navegación del usuario.</p>
+  </article>
+</main>
